@@ -16,6 +16,13 @@ function Alram() {
     const result = useQuery(
         ["getNotice"],
         getNotice,
+        {
+            onSuccess: res => {
+                if (res.data.status === 200) {
+                    setNoticeList(res.data.data);
+                }
+            },
+        }
     );
 
     //알림 server state
@@ -43,6 +50,7 @@ function Alram() {
         },
         onSuccess: res => {
             if (res.data.status === 200) {
+                setNoticeList(res.data.data);
                 result.refetch();
             }
         },

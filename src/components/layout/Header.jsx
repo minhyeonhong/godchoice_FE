@@ -28,6 +28,15 @@ const Header = () => {
     }
     const result = useQuery(['getNotice'], //key
         getNotice,
+        {
+            onSuccess: res => {
+                if (res.data.status === 200 && res.data.data !== null) {
+                    const resList = res.data.data;
+                    const unReadNum = resList.filter((notice) => { return !notice.readStatus }).length;
+                    setAlarmNum(unReadNum);
+                }
+            }
+        }
     )
 
     //알림 server state
@@ -71,6 +80,10 @@ const Header = () => {
                 if (isJson(event.data)) {
                     //알림 리스트 refetch
                     result.refetch();
+
+                    setAlarmNum(
+                        result.data?.data?.data?.filter((notice) => { return !notice.readStatus }).length
+                    )
                     //실시간 알림 데이터
                     const obj = JSON.parse(event.data);
                     setNewNotice(obj);

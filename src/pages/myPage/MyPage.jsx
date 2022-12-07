@@ -138,7 +138,7 @@ const MyPage = () => {
 
         {/* admin일때 배너리스트 */}
         <div>
-          {myInfo.adminPage.map((post) => {
+          {myInfo?.adminPage?.map((post) => {
             return (
               <div key={post.id}>
                 {post.title}
