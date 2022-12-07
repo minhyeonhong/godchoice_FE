@@ -25,8 +25,8 @@ instance.interceptors.response.use(function (response) {
 }, async function (error) {
     console.log("interceptors error", error);
     switch (error.response?.data.status) {
-        case 400:
-            break;
+        // case 400:
+        //     break;
         case 403:
             // console.log("인터셉터 403 error", error);
             const refreshToken = localStorage.getItem('refreshToken');
@@ -50,11 +50,13 @@ instance.interceptors.response.use(function (response) {
             // }
 
             break;
-        case 404:
-            break;
-        case 500:
-            break;
+        // case 404:
+        //     break;
+        // case 500:
+        //     break;
         default:
+            alert("알수없는 오류입니다.\n홈으로 이동합니다.");
+            window.location.replace("/");
             break;
     }
 

@@ -26,7 +26,7 @@ const Router = () => {
     return (
         <BrowserRouter>
             <Suspense fallback={<PageState display='flex' flexDirection='column' state='failRequest' imgWidth='25%' height='100vh'
-                text='잠시만 기려주세요.' />}>
+                text='잠시만 기다려주세요.' />}>
                 <Routes>
                     {/* 홈 페이지 */}
                     <Route path="/" element={<Home />} />
