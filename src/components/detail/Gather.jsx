@@ -164,7 +164,9 @@ const Gather = ({ postId, url }) => {
     })
     //게시글 삭제하기
     const onGatherDelete = (postId) => {
-        deleteGatherPost.mutate(postId);
+        if (window.confirm("게시글을 삭제 하시겠습니까?")) {
+            deleteGatherPost.mutate(postId);
+        }
     }
 
     const ingHandle = (e) => {

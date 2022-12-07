@@ -15,12 +15,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { postApis } from '../../api/api-functions/postApis';
 import useInput from '../../hooks/useInput';
 import PageState from '../common/PageState';
-import { useNavigate } from 'react-router-dom';
 import TextAreaAutoResize from "react-textarea-autosize";
 
 const Ask = ({ postId, url }) => {
-    const navigate = useNavigate();
-
 
     //디테일 페이지 불러오기
     const getAskPost = async () => {
@@ -55,8 +52,7 @@ const Ask = ({ postId, url }) => {
         },
         onSuccess: res => {
             if (res.data.status === 200) {
-                //window.location.reload();
-                navigate(0);
+                window.location.reload();
             }
         },
     })
@@ -123,13 +119,14 @@ const Ask = ({ postId, url }) => {
         },
         onSuccess: res => {
             if (res.data.status === 200) {
-                //window.location.replace('/');
-                navigate("/")
+                window.location.replace('/');
             }
         },
     })
     const onAskDelete = (postId) => {
-        deleteAskPost.mutate(postId);
+        if (window.confirm("게시글을 삭제 하시겠습니까?")) {
+            deleteAskPost.mutate(postId);
+        }
     }
 
     //새로추가한 글 삭제할 이미지

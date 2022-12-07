@@ -5,11 +5,10 @@ import loadingImg from '../../assets/images/common/spiner_hands.gif'
 import notFoundImg from '../../assets/images/common/spiner_eyes.gif'
 import failRequestImg from '../../assets/images/common/404.png'
 
-import { useNavigate } from 'react-router-dom';
 import Button from '../elements/Button';
 
 const PageState = (props) => {
-    const navigate = useNavigate();
+
     return (
         <StBackground
             display={props.display}

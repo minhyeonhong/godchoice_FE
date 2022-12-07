@@ -149,7 +149,9 @@ const Event = ({ postId, url }) => {
     })
     //게시글 삭제
     const onEventDelete = (postId) => {
-        deleteEventPost.mutate(postId);
+        if (window.confirm("게시글을 삭제 하시겠습니까?")) {
+            deleteEventPost.mutate(postId);
+        }
     }
 
     if (result.isLoading) {
