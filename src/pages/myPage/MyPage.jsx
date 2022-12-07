@@ -40,8 +40,8 @@ const MyPage = () => {
 
   //관리자 배너 삭제
   const deleteBanner = useMutation({
-    mutationFn: async (id) => {
-      return await postApis.deleteAdminPostAX(id);
+    mutationFn: (id) => {
+      return postApis.deleteAdminPostAX(id);
     },
     onSuccess: res => {
       if (res.data.status === 200) {
@@ -68,11 +68,11 @@ const MyPage = () => {
 
   //로그아웃
   const logout = useMutation({
-    mutationFn: async (domain) => {
+    mutationFn: (domain) => {
       if (domain === 'kakao') {
-        return await myPageApis.kakaologoutAX(domain);
+        return myPageApis.kakaologoutAX(domain);
       } else {
-        return await myPageApis.logoutAX();
+        return myPageApis.logoutAX();
       }
 
     },

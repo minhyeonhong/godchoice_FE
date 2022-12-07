@@ -66,8 +66,8 @@ const Event = ({ postId, url }) => {
 
     //게시글 수정
     const putEventPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.putEventPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.putEventPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -138,8 +138,8 @@ const Event = ({ postId, url }) => {
 
     //게시글 삭제
     const deleteEventPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.deleteEventPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.deleteEventPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {

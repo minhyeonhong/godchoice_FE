@@ -23,8 +23,8 @@ function Alram() {
 
     //알림 읽고 해당 게시물로 이동
     const putNotice = useMutation({
-        mutationFn: async (id) => {
-            return await notificationApis.putNotificationAX(id);
+        mutationFn: (id) => {
+            return notificationApis.putNotificationAX(id);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -38,8 +38,8 @@ function Alram() {
 
     //알림 삭제
     const deleteNotice = useMutation({
-        mutationFn: async (id) => {
-            return await notificationApis.deleteNotificationAX(id);
+        mutationFn: (id) => {
+            return notificationApis.deleteNotificationAX(id);
         },
         onSuccess: res => {
             if (res.data.status === 200) {

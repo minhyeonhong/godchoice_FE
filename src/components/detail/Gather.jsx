@@ -49,8 +49,8 @@ const Gather = ({ postId, url }) => {
 
     //게시글 수정
     const putGatherPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.putGatherPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.putGatherPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -153,8 +153,8 @@ const Gather = ({ postId, url }) => {
 
     //게시글 삭제
     const deleteGatherPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.deleteGatherPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.deleteGatherPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {

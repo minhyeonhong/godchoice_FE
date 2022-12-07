@@ -51,8 +51,8 @@ const MyPageEdit = () => {
 
   //내정보 수정
   const putMyInfo = useMutation({
-    mutationFn: async (obj) => {
-      return await myPageApis.putMyPageAX(obj);
+    mutationFn: (obj) => {
+      return myPageApis.putMyPageAX(obj);
     },
     onSuccess: res => {
       if (res.data.status === 200) {

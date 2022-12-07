@@ -47,8 +47,8 @@ const Ask = ({ postId, url }) => {
 
     //게시글 수정
     const putAskPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.putAskPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.putAskPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -114,8 +114,8 @@ const Ask = ({ postId, url }) => {
 
     //게시글 삭제
     const deleteAskPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.deleteAskPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.deleteAskPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
