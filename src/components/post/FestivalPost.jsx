@@ -43,8 +43,8 @@ const FestivalPost = () => {
 
     //게시글 작성
     const insertEventPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.addEventPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.addEventPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -55,8 +55,8 @@ const FestivalPost = () => {
 
     //관리자글 작성
     const insertAdminPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.addAdminPostAX(obj);
+        mutationFn: (obj) => {
+            return postApis.addAdminPostAX(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {

@@ -15,11 +15,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { postApis } from '../../api/api-functions/postApis';
 import useInput from '../../hooks/useInput';
 import PageState from '../common/PageState';
-import { useNavigate } from 'react-router-dom';
+import TextAreaAutoResize from "react-textarea-autosize";
 
 const Ask = ({ postId, url }) => {
-    const navigate = useNavigate();
-
 
     //디테일 페이지 불러오기
     const getAskPost = async () => {
@@ -49,13 +47,12 @@ const Ask = ({ postId, url }) => {
 
     //게시글 수정
     const putAskPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.putAskPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.putAskPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
-                //window.location.reload();
-                navigate(0);
+                window.location.reload();
             }
         },
     })
@@ -117,18 +114,19 @@ const Ask = ({ postId, url }) => {
 
     //게시글 삭제
     const deleteAskPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.deleteAskPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.deleteAskPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
-                //window.location.replace('/');
-                navigate("/")
+                window.location.replace('/');
             }
         },
     })
     const onAskDelete = (postId) => {
-        deleteAskPost.mutate(postId);
+        if (window.confirm("게시글을 삭제 하시겠습니까?")) {
+            deleteAskPost.mutate(postId);
+        }
     }
 
     //새로추가한 글 삭제할 이미지
@@ -226,7 +224,22 @@ const Ask = ({ postId, url }) => {
                             <div>* '+'버튼 옆에 있는 사진을 클릭하면 사진 선택이 취소됩니다.</div>
                         </div>
 
-                        <STContentTextarea style={{ height: "200px", marginTop: "14px", marginBottom: "14px" }} type="text" name="content" defaultValue={modPost.content || ""} onChange={modPostHandle} />
+                        {/* <STContentTextarea style={{ height: "200px", marginTop: "14px", marginBottom: "14px" }} type="text" name="content" defaultValue={modPost.content || ""} onChange={modPostHandle} /> */}
+                        <TextAreaAutoResize
+                            name='content' value={modPost.content || ""} onChange={modPostHandle}
+                            defaultValue={post.content}
+                            minRows={10}
+                            maxLength={2500}
+                            placeholder="행사글을 띄어쓰기 포함 2500자 이내로 입력해주세요"
+                            style={{
+                                width: "100%",
+                                resize: "none",
+                                outline: "none",
+                                overflow: "hidden",
+                                border: "none",
+                                borderRadius: "5px",
+                            }}
+                        />
 
                         <label>관련 링크</label><br />
                         <STLinkTextarea type="text" name="postLink" defaultValue={modPost.postLink} onChange={modPostHandle} style={{ width: "100%", marginBottom: "14px" }} />
@@ -311,7 +324,19 @@ const Ask = ({ postId, url }) => {
                                 </Carousel>
                             </div>
 
-                            <StContent style={{ marginBottom: "14px", padding: "5px", borderRadius: "10px" }} value={post.content || ""} readOnly />
+                            {/* <StContent style={{ marginBottom: "14px", padding: "5px", borderRadius: "10px" }} value={post.content || ""} readOnly /> */}
+                            <TextAreaAutoResize
+                                defaultValue={post.content}
+                                minRows={10}
+                                style={{
+                                    resize: "none",
+                                    outline: "none",
+                                    overflow: "hidden",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                }}
+                                readOnly
+                            />
 
 
                             {post.postLink !== "" &&

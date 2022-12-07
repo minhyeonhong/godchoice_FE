@@ -19,6 +19,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { postApis } from '../../api/api-functions/postApis';
 import useInput from '../../hooks/useInput';
 import PageState from '../common/PageState';
+import TextAreaAutoResize from "react-textarea-autosize";
 
 const Gather = ({ postId, url }) => {
 
@@ -48,8 +49,8 @@ const Gather = ({ postId, url }) => {
 
     //게시글 수정
     const putGatherPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.putGatherPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.putGatherPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -152,8 +153,8 @@ const Gather = ({ postId, url }) => {
 
     //게시글 삭제
     const deleteGatherPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.deleteGatherPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.deleteGatherPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -163,7 +164,9 @@ const Gather = ({ postId, url }) => {
     })
     //게시글 삭제하기
     const onGatherDelete = (postId) => {
-        deleteGatherPost.mutate(postId);
+        if (window.confirm("게시글을 삭제 하시겠습니까?")) {
+            deleteGatherPost.mutate(postId);
+        }
     }
 
     const ingHandle = (e) => {
@@ -267,7 +270,25 @@ const Gather = ({ postId, url }) => {
 
                             </StCarouselWrap>
                             <div>* '+'버튼 옆에 있는 사진을 클릭하면 사진 선택이 취소됩니다.</div>
-                            <AllTextarea style={{ width: "100%", height: "200px", marginTop: "14px", marginBottom: "14px" }} name="content" defaultValue={modPost.content || ""} onChange={modPostHandle} />
+                            {/* <AllTextarea style={{ width: "100%", height: "200px", marginTop: "14px",
+                             marginBottom: "14px" }} name="content"
+                             defaultValue={modPost.content || ""} onChange={modPostHandle} /> */}
+
+                            <TextAreaAutoResize
+                                name='content' value={modPost.content || ""} onChange={modPostHandle}
+                                defaultValue={post.content}
+                                minRows={10}
+                                maxLength={2500}
+                                placeholder="행사글을 띄어쓰기 포함 2500자 이내로 입력해주세요"
+                                style={{
+                                    width: "100%",
+                                    resize: "none",
+                                    outline: "none",
+                                    overflow: "hidden",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                }}
+                            />
 
                             <SelectWrap>
 
@@ -434,7 +455,19 @@ const Gather = ({ postId, url }) => {
                                         }
                                     </Carousel>
                                 </div>
-                                <StContent style={{ marginBottom: "14px", padding: "5px", borderRadius: "10px" }} value={post.content || ""} readOnly />
+                                {/* <StContent style={{ marginBottom: "14px", padding: "5px", borderRadius: "10px" }} value={post.content || ""} readOnly /> */}
+                                <TextAreaAutoResize
+                                    defaultValue={post.content}
+                                    minRows={10}
+                                    style={{
+                                        resize: "none",
+                                        outline: "none",
+                                        overflow: "hidden",
+                                        border: "none",
+                                        borderRadius: "5px",
+                                    }}
+                                    readOnly
+                                />
 
                                 <div>카카오 링크</div>
                                 <STInput style={{ marginBottom: "14px" }}>

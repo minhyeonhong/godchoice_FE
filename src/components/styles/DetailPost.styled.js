@@ -134,7 +134,7 @@ export const STImg2 = styled.div`
     left: 0px;
     /* position: absolute; */
     background-color: white;
-     width: 70px;
+     width: 90px;
       height: 45px;
 `
 

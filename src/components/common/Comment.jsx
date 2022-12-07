@@ -34,8 +34,8 @@ const Comment = ({ postId, kind }) => {
 
     //댓글 작성
     const insertMutation = useMutation({
-        mutationFn: async (obj) => {
-            return await commentApis.insertCommentAX(obj);
+        mutationFn: (obj) => {
+            return commentApis.insertCommentAX(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -66,8 +66,8 @@ const Comment = ({ postId, kind }) => {
 
     //댓글 삭제
     const deleteMutation = useMutation({
-        mutationFn: async (obj) => {
-            return await commentApis.deleteCommentAX(obj);
+        mutationFn: (obj) => {
+            return commentApis.deleteCommentAX(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {

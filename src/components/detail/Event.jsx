@@ -20,6 +20,7 @@ import PageState from '../common/PageState';
 import { useCallback } from 'react';
 import styled from 'styled-components';
 import { useMemo } from 'react';
+import TextAreaAutoResize from "react-textarea-autosize";
 
 const Event = ({ postId, url }) => {
 
@@ -65,8 +66,8 @@ const Event = ({ postId, url }) => {
 
     //게시글 수정
     const putEventPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.putEventPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.putEventPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -137,8 +138,8 @@ const Event = ({ postId, url }) => {
 
     //게시글 삭제
     const deleteEventPost = useMutation({
-        mutationFn: async (obj) => {
-            return await postApis.deleteEventPostAx(obj);
+        mutationFn: (obj) => {
+            return postApis.deleteEventPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -148,19 +149,10 @@ const Event = ({ postId, url }) => {
     })
     //게시글 삭제
     const onEventDelete = (postId) => {
-        deleteEventPost.mutate(postId);
+        if (window.confirm("게시글을 삭제 하시겠습니까?")) {
+            deleteEventPost.mutate(postId);
+        }
     }
-
-    const handleResize = useCallback(() => {
-        console.log("동작하나")
-        textRef.current.style.height = textRef.current.scrollHeight + "px"
-    }, [])
-
-    useEffect(() => {
-
-    }, [])
-
-    const textRef = useRef();
 
     if (result.isLoading) {
         return < PageState
@@ -239,7 +231,18 @@ const Event = ({ postId, url }) => {
                             </Carousel>
                         </StCarouselWrap>
 
-                        <StContent ref={textRef} onInput={handleResize} row={10}>{post.content}</StContent>
+                        <TextAreaAutoResize
+                            defaultValue={post.content}
+                            minRows={10}
+                            style={{
+                                resize: "none",
+                                outline: "none",
+                                overflow: "hidden",
+                                border: "none",
+                                borderRadius: "5px",
+                            }}
+                            readOnly
+                        />
                         {
                             post.postLink !== "" && (
                                 <>
@@ -269,7 +272,6 @@ const Event = ({ postId, url }) => {
                                 <STEditButton onClick={() => { setMod(true) }}>수정</STEditButton>
                             </div>)}
 
-                        {/* <textarea ref={textRef} onInput={handleResize} /> */}
                     </>
                 :
                 modPost !== undefined &&
@@ -346,7 +348,21 @@ const Event = ({ postId, url }) => {
                     </StCarouselWrap>
                     <div>* '+'버튼 옆에 있는 사진을 클릭하면 사진 선택이 취소됩니다.</div>
                     <div style={{ display: "flex" }}>
-                        <STContentTextarea ref={textRef} onInput={handleResize} name='content' value={modPost.content || ""} onChange={modPostHandle} placeholder="행사글을 띄어쓰기 포함 2500자 이내로 입력해주세요" maxLength={2500}></STContentTextarea>
+                        <TextAreaAutoResize
+                            name='content' value={modPost.content || ""} onChange={modPostHandle}
+                            defaultValue={post.content}
+                            minRows={10}
+                            maxLength={2500}
+                            placeholder="행사글을 띄어쓰기 포함 2500자 이내로 입력해주세요"
+                            style={{
+                                width: "100%",
+                                resize: "none",
+                                outline: "none",
+                                overflow: "hidden",
+                                border: "none",
+                                borderRadius: "5px",
+                            }}
+                        />
                     </div>
 
                     <StTypeBox>
