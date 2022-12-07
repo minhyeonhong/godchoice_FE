@@ -62,8 +62,6 @@ instance.interceptors.response.use(function (response) {
         // case 500:
         //     break;
         default:
-            alert("알수없는 오류입니다.\n홈으로 이동합니다.");
-            window.location.replace("/");
             break;
     }
 
