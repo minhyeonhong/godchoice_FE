@@ -18,7 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 import useInput from "../hooks/useInput";
 
 // 가이드 모달
-import { flexColumn, flexRow } from "../components/styles/Flex";
+import { flexRow } from "../components/styles/Flex";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay, Navigation, Pagination } from "swiper";
 import "swiper/swiper-bundle.min.css";
@@ -26,10 +26,9 @@ import "swiper/swiper.min.css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import guide01 from "../assets/images/banner/guide/guide_01.jpg";
-import guide02 from "../assets/images/banner/guide/guide_02.jpg";
-import guide03 from "../assets/images/banner/guide/guide_03.jpg";
-import guide04 from "../assets/images/banner/guide/guide_04.jpg";
+import guide01 from "../assets/images/banner/guide/guide_01.png";
+import guide02 from "../assets/images/banner/guide/guide_02.png";
+import guide03 from "../assets/images/banner/guide/guide_03.png";
 
 SwiperCore.use([Pagination, Autoplay, Navigation]);
 // ------------- 여기까지 ---------------
@@ -37,7 +36,7 @@ SwiperCore.use([Pagination, Autoplay, Navigation]);
 const Home = () => {
 
   //배너 가져오기
-  const banner = useQuery(['banner'], () => postApis.getAdminPostAX(), { refetchOnWindowFocus: false, retry: 0 })
+  const banner = useQuery(['banner'], async () => await postApis.getAdminPostAX(), { cacheTime: 3000, refetchOnWindowFocus: false, retry: 1 })
 
   //유저 지역정보 가져오기
   const userAddressTag = localStorage.getItem('userAddressTag');
@@ -63,16 +62,17 @@ const Home = () => {
 
   // 가이드 모달
   const [guideOn, setGuideOn] = useState(false);
-  const guides = [guide01, guide02, guide03, guide04];
+  const guides = [guide01, guide02, guide03];
   // ------------- 여기까지 ---------------
 
   return (
-
     <Layout>
       <StHomeWrap>
         <>
           <ScrollToTop />
-          {modalOn && <WritingToggle modalOn={modalOn} setModalOn={setModalOn} />}
+          {modalOn && (
+            <WritingToggle modalOn={modalOn} setModalOn={setModalOn} />
+          )}
           <TopButton modalOn={modalOn} setModalOn={setModalOn} />
 
           {guideOn && (
@@ -81,6 +81,14 @@ const Home = () => {
                 setGuideOn(!guideOn);
               }}
             >
+              <button
+                onClick={() => {
+                  setGuideOn(!guideOn);
+                }}
+              >
+                ✕
+                {/* 닫기 */}
+              </button>
               <StyleGuide onClick={(e) => e.stopPropagation()}>
                 <StyledSwiper
                   className="swipe"
@@ -94,23 +102,56 @@ const Home = () => {
                   centeredSlides={true}
                   style={{ backgroundColor: "transparent" }}
                 >
-                  {guides?.map((guide, i) => {
+                  {/* {guides?.map((guide, i) => {
                     return (
                       <SwiperSlide key={i}>
                         <ItemDetailImg src={guide} />
-                      </SwiperSlide>
-                    );
-                  })}
+                      </SwiperSlide> */}
+                  {/* return ( */}
+                  <>
+                    <SwiperSlide>
+                      <div style={{ textAlign: "center" }}>
+                        <h4 style={{ fontWeight: 600 }}>지역 맞춤 설정</h4>
+                        <p style={{ fontSize: "12px" }}>
+                          마이페이지에서 관심 지역을 설정하면 <br />
+                          선택 지역 행사들을 <br />
+                          우선적으로 보여드립니다.
+                          <br />
+                          태그로도 지역 선택이 가능합니다!<br /><br />
+
+                        </p>
+                      </div>
+                      <ItemDetailImg src={guide01} />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <div style={{ textAlign: "center" }}>
+                        <h4 style={{ fontWeight: 600 }}>다양한 정보를 보고 함께!</h4>
+                        <p style={{ fontSize: "12px" }}>
+                          행사글, 모집글, 질문글로
+                          <br /> 전시회, 영화 등을 알리거나
+                          <br />
+                          함께 갈 사람을 모집, 또는 <br />
+                          궁금한 것을 질문할 수 있습니다.<br /><br />
+                        </p>
+                      </div>
+                      <ItemDetailImg src={guide02} />
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <div style={{ textAlign: "center" }}>
+                        <h4 style={{ fontWeight: 600 }}>실시간 알림 기능</h4>
+                        <p style={{ fontSize: "12px" }}>
+                          댓글이 달리면 실시간으로 <br />
+                          알림을 받을 수 있어 <br />
+                          용이하게 사용할 수 있습니다! <br /><br /><br />
+                        </p>
+                      </div>
+                      <ItemDetailImg src={guide03} />
+                    </SwiperSlide>
+                  </>
+                  {/* ); */}
+                  {/* })} */}
                 </StyledSwiper>
                 {/* StyledSwiper */}
-
-                <button
-                  onClick={() => {
-                    setGuideOn(!guideOn);
-                  }}
-                >
-                  ✕
-                </button>
               </StyleGuide>
             </Bg>
           )}
@@ -120,7 +161,8 @@ const Home = () => {
         {/* 슬라이드 */}
         <StCarouselWrap>
           <Carousel >
-            {banner?.data?.data?.data?.length === 0 ?
+            {!banner.isLoading &&
+              banner.data?.data.data.length === 0 ?
               <Carousel.Item>
                 <PageState
                   display='flex'
@@ -128,7 +170,7 @@ const Home = () => {
                   text='등록된 배너가 없습니다.' />
               </Carousel.Item>
               :
-              banner?.data?.data?.data?.map((post) => {
+              banner.data?.data.data.map((post) => {
                 return (
                   <Carousel.Item key={post.id} onClick={() => {
                     if (post.postLink === "https://이용방법") {
@@ -152,7 +194,12 @@ const Home = () => {
         </StCarouselWrap>
 
         {/* 검색 */}
-        <Search searchState={searchState} setSearchState={setSearchState} search={search} searchHandle={searchHandle} />
+        <Search
+          searchState={searchState}
+          setSearchState={setSearchState}
+          search={search}
+          searchHandle={searchHandle}
+        />
 
         {/* 리스트 */}
         <StTabBox>
@@ -160,7 +207,9 @@ const Home = () => {
             defaultActiveKey="event"
             id="justify-tab-example"
             activeKey={searchState.main}
-            onSelect={(key) => setSearchState({ ...searchState, main: key, page: 0 })}
+            onSelect={(key) =>
+              setSearchState({ ...searchState, main: key, page: 0 })
+            }
             className="tabs"
             justify
           >
@@ -173,7 +222,7 @@ const Home = () => {
           <Deletes />
         </StTabBox>
       </StHomeWrap>
-    </Layout >
+    </Layout>
   );
 };
 
@@ -219,30 +268,28 @@ const StTabBox = styled.div`
   }
 `;
 
-/* 배너 모달 버튼 -- 수정할 것 */
-const BannerModal = styled.div`
-  background-color: red;
-  width: 50px;
-  height: 50px;
-`;
-
 export const StyledSwiper = styled(Swiper)`
-  background: red;
-  ${flexRow}
-  justify-content: center;
-  width: 370px;
+  background: transparent;
+  /* ${flexRow}
+  justify-content: center; */
+  /* width:100%; */
+  width: 100%;
+  color: #fff;
+
   /* @media screen and (max-width: 425px)  {
         width: 95%;
         border-radius: 20px;
     } */
 `;
 
+
 const StyleGuide = styled.div`
-  ${flexRow}
-  justify-content: center;
+  /* ${flexRow}
+  justify-content: center; */
   width: 300px;
   height: auto;
   position: absolute;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   /* @media screen and (min-width: 400px) and (max-width:100vw) {
@@ -266,23 +313,21 @@ const Bg = styled.div`
   bottom: 0;
   right: 0;
   width: 425px;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: #3556e1;
   button {
     z-index: 100;
-    display: flex;
+    /* display: flex; */
     position: fixed;
-    /* left: 50%;
-    transform: translateX(-50%); */
-    right: 10px;
-    top: 10px;
+    right:10px;
+    top:0;
+    margin: 10px 10px;
     width: 30px;
     height: 30px;
     line-height: 30px;
-    border-radius: 10px;
-    background-color: #ffffffeb;
-    justify-content: center;
+    background-color: transparent;
+    color: #ffffffd3;
+    /* justify-content: center; */
     border: none;
-    /* border-radius: 10px; */
     :hover {
       cursor: pointer;
     }
@@ -290,6 +335,14 @@ const Bg = styled.div`
 `;
 
 export const ItemDetailImg = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 70%;
+  height: auto;
+  /* margin: 0 auto; */
+  /* position: absolute;
+  left: 50%; */
+  display: flex;
+  align-items: center;
+  margin: 10px auto;
+  /* transform: translateX(-50%); */
+
 `;

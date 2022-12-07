@@ -12,30 +12,36 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { myPageApis } from '../../api/api-functions/myPageApis';
 import { postApis } from '../../api/api-functions/postApis';
 import { useEffect } from 'react';
+import PageState from '../../components/common/PageState';
 
 const MyPage = () => {
   const navigate = useNavigate();
 
-  // 내정보 server state
-  const [myInfo, setMyInfo] = useState({});
+
   //내정보 불러오기
-  useQuery(['getMyPage'],
-    () => myPageApis.getMyPageAX(), //fn
-    {//options
-      refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-      retry: 0, // 실패시 재호출 몇번 할지
+  const getMyPage = async () => {
+    const res = await myPageApis.getMyPageAX();
+    return res;
+  }
+  const result = useQuery(
+    ["getMyPage"],
+    getMyPage,
+    {
       onSuccess: res => {
         if (res.data.status === 200) {
           localStorage.setItem('userAddressTag', res.data.data.addressTag);
-          setMyInfo(res.data.data);
         }
       }
-    })
+    }
+  );
+  // 내정보 server state
+  const myInfo = result.data?.data.data;
+
 
   //관리자 배너 삭제
   const deleteBanner = useMutation({
-    mutationFn: id => {
-      return postApis.deleteAdminPostAX(id);
+    mutationFn: async (id) => {
+      return await postApis.deleteAdminPostAX(id);
     },
     onSuccess: res => {
       if (res.data.status === 200) {
@@ -50,35 +56,40 @@ const MyPage = () => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
       //logout.mutate(myInfo.domain);
 
-      if (myInfo.domain === 'kakako') {
-        logout.mutate(myInfo.domain);
-      } else {
-        //네이버 구글 
-        localStorage.clear();
-        navigate("/");
-      }
+      // if (myInfo.domain === 'kakako') {
+      //   logout.mutate(myInfo.domain);
+      // } else {
+      //네이버 구글 
+      localStorage.clear();
+      navigate("/");
+      //}
     }
   }
 
-
   //로그아웃
   const logout = useMutation({
-    mutationFn: domain => {
+    mutationFn: async (domain) => {
       if (domain === 'kakao') {
-        return myPageApis.kakaologoutAX(domain);
+        return await myPageApis.kakaologoutAX(domain);
       } else {
-        return myPageApis.logoutAX();
+        return await myPageApis.logoutAX();
       }
 
     },
     onSuccess: res => {
-      console.log("logout res", res);
       if (res.data.status === 200) {
         localStorage.clear();
         navigate("/");
       }
     },
   })
+
+  if (result.isLoading) {
+    return < PageState
+      display={'flex'}
+      state='loading' imgWidth='25%' height='100vh'
+      text='잠시만 기다려 주세요.' />;
+  }
 
   return (
     <Layout>
@@ -127,7 +138,7 @@ const MyPage = () => {
 
         {/* admin일때 배너리스트 */}
         <div>
-          {myInfo?.adminPage?.map((post) => {
+          {myInfo.adminPage.map((post) => {
             return (
               <div key={post.id}>
                 {post.title}

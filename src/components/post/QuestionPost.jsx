@@ -41,8 +41,8 @@ const QuestionPost = () => {
 
     //게시글 작성
     const insertAskPost = useMutation({
-        mutationFn: obj => {
-            return postApis.addAskPostAx(obj);
+        mutationFn: async (obj) => {
+            return await postApis.addAskPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {

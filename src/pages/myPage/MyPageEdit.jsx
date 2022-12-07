@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +12,7 @@ import useInput from "../../hooks/useInput";
 import useImgUpload from "../../hooks/useImgUpload";
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { myPageApis } from '../../api/api-functions/myPageApis';
+import PageState from "../../components/common/PageState";
 
 const MyPageEdit = () => {
   const navigate = useNavigate();
@@ -28,26 +29,30 @@ const MyPageEdit = () => {
     userAddress: ""
   });
 
-  // 내정보 server state
-  const [userInfo, setUserInfo] = useState({});
   //내정보 불러오기
-  useQuery(['getMyPage'],
-    () => myPageApis.getMyPageAX(), //fn
-    {//options
-      refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-      retry: 0, // 실패시 재호출 몇번 할지
+  const getMyPage = async () => {
+    const res = await myPageApis.getMyPageAX();
+    return res;
+  }
+  const result = useQuery(
+    ["getMyPage"],
+    getMyPage,
+    {
       onSuccess: res => {
         if (res.data.status === 200) {
           localStorage.setItem('userAddressTag', res.data.data.addressTag);
-          setUserInfo(res.data.data);
         }
       }
-    })
+    }
+  );
+  // 내정보 server state
+  const userInfo = result.data?.data.data;
+
 
   //내정보 수정
   const putMyInfo = useMutation({
-    mutationFn: obj => {
-      return myPageApis.putMyPageAX(obj);
+    mutationFn: async (obj) => {
+      return await myPageApis.putMyPageAX(obj);
     },
     onSuccess: res => {
       if (res.data.status === 200) {
@@ -80,15 +85,21 @@ const MyPageEdit = () => {
     putMyInfo.mutate(formData);
   };
 
+  if (result.isLoading) {
+    return < PageState
+      display={'flex'}
+      state='loading' imgWidth='25%' height='100vh'
+      text='잠시만 기다려 주세요.' />;
+  }
+
   return (
-    Object.keys(userInfo).length > 0 &&
     <Layout>
       <MyProfile>
         <MyImgWrap>
           <MyImgBox>
             <img src={fileUrls[0] || userInfo.userImg} alt="my profil photo" />
             <label htmlFor="img_UpFile">
-              <Camera style={{cursor:"pointer"}} />
+              <Camera style={{ cursor: "pointer" }} />
             </label>
             <input
               ref={imgRef}

@@ -15,27 +15,27 @@ const MyScrap = () => {
 
   const [categoryTab, setCategoryTab] = useState("event");
 
-  //스크랩 글 server state
-  const [myScrapList, setMyScrapList] = useState({});
-  const { eventPost, gatherPost, askPost } = myScrapList;
+
 
   //스크랩 글 불러오기
-  useQuery(['getMyScrapList'],
-    () => myPageApis.getMyScrapAX(), //fn
-    {//options
-      refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-      retry: 0, // 실패시 재호출 몇번 할지
-      onSuccess: res => {
-        if (res.data.status === 200) {
-          setMyScrapList(res.data.data);
-        }
-      }
-    })
+  const getMyScrapList = async () => {
+    const res = await myPageApis.getMyScrapAX();
+    return res;
+  }
+  const result = useQuery(['getMyScrapList'],
+    getMyScrapList,
+  )
+
+  //스크랩 글 server state
+  const myScrapList = result.data?.data.data;
+  const { eventPost, gatherPost, askPost } = myScrapList;
 
   const onClickCategory = (tab) => {
     setCategoryTab(tab);
   };
-
+  if (result.isLoading) {
+    return null;
+  }
   return (
     <>
       <CateWrap>
@@ -148,7 +148,7 @@ const MyScrap = () => {
                       </ItemImg>
                       <ItemContainer>
                         <ItemTop style={{ marginBottom: "20px" }}>
-                          <p style={{ fontWeight: 600, fontSize: "20px" }}>{v.title.length > 15 ? v.title.substring(0, 14) + '...' : v.title}</p>
+                          <p style={{ fontWeight: 600, fontSize: "20px" }}>{v.title.length > 10 ? v.title.substring(0, 14) + '...' : v.title}</p>
                           <p>{v.category}</p>
                           <p>{v.content}</p>
                         </ItemTop>
@@ -183,7 +183,6 @@ const CategoryBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
 `;
 
 const CategoryInfoList = styled.div`
@@ -198,20 +197,20 @@ const ItemImg = styled.div`
   height: 130px;
   padding: 3px;
   border-radius : 20px;
-  @media (max-width: 375px) {
+  /* @media (max-width: 375px) {
     width: 125px;
     height: 150px;
   }
   @media (max-width: 299px) {
     width: 100px;
     height: 125px;
-  }
+  } */
 `;
 
 
 const ListBox = styled.div`
   height: 154px;
-  margin : 5px auto ;
+  margin : 5px;
   background-color : #fff;
   cursor: pointer;
   padding: 23px 16px;
@@ -233,7 +232,7 @@ const ItemTop = styled.div`
   margin-bottom : 5px;
   p {
     font-size : 16px;
-    line-height: 1.5;
+    line-height: 1.4;
     font-weight: 400;
   }
 `

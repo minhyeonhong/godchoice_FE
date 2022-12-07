@@ -50,7 +50,7 @@ const Logo = styled.div`
   align-items: center;
   width: 75%;
   /* height: 130px; */
-  margin: 150px auto 100px auto;
+  margin:100px auto;
   img {
     width: 100%;
   }

@@ -18,8 +18,8 @@ const PostScrap = ({ bookMarkStatus }) => {
   }, [bookMarkStatus])
 
   const postScrap = useMutation({
-    mutationFn: obj => {
-      return postApis.postScrapAx(obj);
+    mutationFn: async (obj) => {
+      return await postApis.postScrapAx(obj);
     },
     onSuccess: res => {
       if (res.data.status === 200) {

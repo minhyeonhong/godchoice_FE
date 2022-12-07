@@ -25,8 +25,8 @@ const Alram = lazy(() => import("../components/home/Alram"))
 const Router = () => {
     return (
         <BrowserRouter>
-            <Suspense fallback={<PageState display='flex' state='loading' imgWidth='25%' height='100vh'
-                text='잠시만 기다려 주세요.' />}>
+            <Suspense fallback={<PageState display='flex' flexDirection='column' state='failRequest' imgWidth='25%' height='100vh'
+                text='잠시만 기려주세요.' />}>
                 <Routes>
                     {/* 홈 페이지 */}
                     <Route path="/" element={<Home />} />

@@ -22,29 +22,20 @@ import styled from 'styled-components';
 import { useMemo } from 'react';
 
 const Event = ({ postId, url }) => {
+
+    //디테일 페이지 불러오기
+    const getEventPost = async () => {
+        const res = await postApis.getPostAX({ url, postId });
+        return res;
+    }
+    const result = useQuery(
+        ["getEventPost", url, postId],
+        getEventPost,
+    );
     //디테일 페이지 server state
-    const [post, setPost] = useState();
+    const post = result.data?.data.data;
     //업데이트 인풋
-    const [modPost, setmodPost, modPostHandle] = useInput();
-    //디테일 페이지 server state
-    const { isSuccess, isLoading, isFetching } = useQuery(['detail', { url, postId }], //key
-        () => postApis.getPostAX({ url, postId }), //fn
-        {//options
-            refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-            retry: 0, // 실패시 재호출 몇번 할지
-            onSuccess: res => { // 성공시 호출
-                console.log("res", res);
-                if (res.data.status === 200) {
-                    setPost(res.data.data);
-                    setmodPost(res.data.data);
-                }
-            },
-            onError: res => {
-                console.log("error", res);
-                alert("잘못된 경로입니다.");
-                window.location.replace("/");
-            }
-        })
+    const [modPost, setmodPost, modPostHandle] = useInput(result.data?.data.data);
 
     //상세글 수정하기 상태
     const [mod, setMod] = useState(false);
@@ -56,7 +47,6 @@ const Event = ({ postId, url }) => {
 
     const popupPostCode = () => {
         setIsAddressModal(!isAddressModal)
-
     }
 
     useEffect(() => {
@@ -75,8 +65,8 @@ const Event = ({ postId, url }) => {
 
     //게시글 수정
     const putEventPost = useMutation({
-        mutationFn: obj => {
-            return postApis.putEventPostAx(obj);
+        mutationFn: async (obj) => {
+            return await postApis.putEventPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -147,8 +137,8 @@ const Event = ({ postId, url }) => {
 
     //게시글 삭제
     const deleteEventPost = useMutation({
-        mutationFn: obj => {
-            return postApis.deleteEventPostAx(obj);
+        mutationFn: async (obj) => {
+            return await postApis.deleteEventPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -161,9 +151,6 @@ const Event = ({ postId, url }) => {
         deleteEventPost.mutate(postId);
     }
 
-    const textRef = useRef();
-
-
     const handleResize = useCallback(() => {
         console.log("동작하나")
         textRef.current.style.height = textRef.current.scrollHeight + "px"
@@ -173,260 +160,259 @@ const Event = ({ postId, url }) => {
 
     }, [])
 
+    const textRef = useRef();
+
+    if (result.isLoading) {
+        return < PageState
+            display={'flex'}
+            state='loading' imgWidth='25%' height='100vh'
+            text='잠시만 기다려 주세요.' />;
+    }
+
     return (
-        isLoading === true ?
-            < PageState
-                display={isLoading ? 'flex' : 'none'}
-                state='loading' imgWidth='25%' height='100vh'
-                text='잠시만 기다려 주세요.' /> :
-            isSuccess === false ?
-                <PageState display={isSuccess ? 'none' : 'flex'}
-                    flexDirection='column' state='notFound' imgWidth='25%' height='100vh'
-                    text='해당 페이지를 찾을 수 없습니다.' />
-                :
-                <StWrap>
+        <StWrap>
 
-                    {!mod ?
-                        post === undefined ?
-                            <PageState display='flex'
-                                flexDirection='column' state='notFound' imgWidth='25%' height='100vh'
-                                text='삭제된 게시글 입니다.' />
-                            :
-                            <>
-                                <STIng style={{ margin: "14px 0" }}>
-                                    <div style={{ display: "flex" }}>
-                                        <div>
-                                            {post.postState === "진행중" ?
-                                                (<STIngDiv><div>{post.postState}</div></STIngDiv>)
-                                                :
-                                                (<STIngDiv style={{ background: "#727785" }}>{post.postState}</STIngDiv>)
-                                            }
+            {!mod ?
+                post === undefined ?
+                    <PageState display='flex'
+                        flexDirection='column' state='notFound' imgWidth='25%' height='100vh'
+                        text='삭제된 게시글 입니다.' />
+                    :
+                    <>
+                        <STIng style={{ margin: "14px 0" }}>
+                            <div style={{ display: "flex" }}>
+                                <div>
+                                    {post.postState === "진행중" ?
+                                        (<STIngDiv><div>{post.postState}</div></STIngDiv>)
+                                        :
+                                        (<STIngDiv style={{ background: "#727785" }}>{post.postState}</STIngDiv>)
+                                    }
+                                </div>
+                                <div>
+                                    <STImg>
+                                        <div style={{ background: "white", width: "70px", height: "45px" }}>
+                                            <div style={{ margin: "0 5px 0 18px", paddingTop: "10px" }}>
+                                                <img src={Views} style={{ width: "20px", height: "20px", flex: "2", marginRight: "4px" }} />
+                                                {post.viewCount}
+                                            </div>
                                         </div>
-                                        <div>
-                                            <STImg>
-                                                <div style={{ background: "white", width: "70px", height: "45px" }}>
-                                                    <div style={{ margin: "0 5px 0 18px", paddingTop: "10px" }}>
-                                                        <img src={Views} style={{ width: "20px", height: "20px", flex: "2", marginRight: "4px" }} />
-                                                        {post.viewCount}
-                                                    </div>
-                                                </div>
-                                            </STImg>
-                                        </div>
-
-                                    </div>
-                                    <div>
-                                        <PostScrap style={{ right: "0px" }} bookMarkStatus={post.bookMarkStatus} />
-                                    </div>
-
-                                </STIng>
-
-                                <STBox2 style={{ display: "flex" }}>
-                                    <STButton style={{ width: "65px", flex: "2", padding: "0 3px", fontSize: "15px" }}>행사글</STButton>
-                                    <STButton style={{ width: "70px", flex: "2", padding: "0 3px", fontSize: "15px" }}>{post.category}</STButton>
-                                    <STButton style={{ width: "110px", flex: "3", padding: "0 3px", fontSize: "15px" }}>{post.startPeriod}</STButton>
-                                    <span style={{ paddingTop: "8px" }}>~</span>
-                                    <STButton style={{ width: "110px", flex: "3", padding: "0 3px", fontSize: "15px" }}>{post.endPeriod}</STButton>
-                                </STBox2>
-
-                                <div style={{ margin: "10px 0" }}>
-                                    <img src={post.userImg} style={{ width: "36px", height: "36px", borderRadius: "30px" }} />
-                                    <STUsername>{post.username}</STUsername>
+                                    </STImg>
                                 </div>
 
-                                <STInput style={{ height: "48px" }}><p>{post.title}</p></STInput>
+                            </div>
+                            <div>
+                                <PostScrap style={{ right: "0px" }} bookMarkStatus={post.bookMarkStatus} />
+                            </div>
 
-                                <StCarouselWrap>
-                                    <Carousel>
-                                        {
-                                            post.postImgInfo !== undefined &&
-                                            post.postImgInfo.map((imgInfo, i) => {
-                                                return (
-                                                    <Carousel.Item key={i}>
-                                                        <img style={{ width: "100%", height: "396px", borderRadius: "10px", objectFit: "contain" }}
-                                                            className="d-block w-100"
-                                                            src={imgInfo.postImgUrl}
-                                                            alt={`slide${i + 1}`}
-                                                        />
-                                                    </Carousel.Item>
-                                                )
-                                            })}
-                                    </Carousel>
-                                </StCarouselWrap>
+                        </STIng>
 
-                                <StContent ref={textRef} onInput={handleResize} row={10}>{post.content}</StContent>
+                        <STBox2 style={{ display: "flex" }}>
+                            <STButton style={{ width: "65px", flex: "2", padding: "0 3px", fontSize: "15px" }}>행사글</STButton>
+                            <STButton style={{ width: "70px", flex: "2", padding: "0 3px", fontSize: "15px" }}>{post.category}</STButton>
+                            <STButton style={{ width: "110px", flex: "3", padding: "0 3px", fontSize: "15px" }}>{post.startPeriod}</STButton>
+                            <span style={{ paddingTop: "8px" }}>~</span>
+                            <STButton style={{ width: "110px", flex: "3", padding: "0 3px", fontSize: "15px" }}>{post.endPeriod}</STButton>
+                        </STBox2>
+
+                        <div style={{ margin: "10px 0" }}>
+                            <img src={post.userImg} style={{ width: "36px", height: "36px", borderRadius: "30px" }} />
+                            <STUsername>{post.username}</STUsername>
+                        </div>
+
+                        <STInput style={{ height: "48px" }}><p>{post.title}</p></STInput>
+
+                        <StCarouselWrap>
+                            <Carousel>
                                 {
-                                    post.postLink !== "" && (
-                                        <>
-                                            <div>관련 링크</div>
-                                            <STInput style={{ marginBottom: "14px", minHeight: "40px" }}>
-                                                <a href={post.postLink} target="_blank">{post.postLink}</a>
-                                            </STInput>
-                                        </>
-                                    )
-                                }
-                                {
-                                    modPost.postAddress && (
-                                        <>
-                                            <div>행사장소</div>
-                                            <div style={{ display: "flex", marginBottom: "8px" }}>
-                                                <STAddressButton style={{ flex: "2" }}>#{modPost.postAddress.split('')[0] + modPost.postAddress.split('')[1]}</STAddressButton>
-                                                <STInput style={{ flex: "8", marginLeft: "5px" }}>{post.postAddress}</STInput>
-                                            </div>
-                                        </>
-                                    )
-                                }
-                                <KakaoMap address={post.postAddress} width='100%' height='144px' />
-
-                                {localStorage.getItem('userId') === post.userId.toString() &&
-                                    (<div>
-                                        <STEditButton style={{ background: "#515466", marginLeft: "5px" }} onClick={() => { onEventDelete(postId); }}>삭제</STEditButton>
-                                        <STEditButton onClick={() => { setMod(true) }}>수정</STEditButton>
-                                    </div>)}
-
-                                {/* <textarea ref={textRef} onInput={handleResize} /> */}
-                            </>
-                        :
-                        modPost !== undefined &&
-                        <>
-                            <h4 style={{ textAlign: "center", marginTop: "18px", marginBottom: "18px" }}>행사글</h4>
-                            <STTitleInput type='text' name='title' value={modPost.title || ""} onChange={modPostHandle} />
-
-                            <StCarouselWrap>
-
-                                <Carousel>
-                                    {delImg === "" || modPost.postImgInfo.length - delImg.length > 0 && modPost.postImgInfo[0].postImgId !== null &&
-                                        modPost.postImgInfo
-                                            .filter((item, i) => delImg.indexOf(item.postImgId) === -1)
-                                            .map((imgInfo, i) => {
-                                                return (
-
-                                                    <Carousel.Item key={imgInfo.id}>
-                                                        <img style={{ width: "100%", height: "396px", borderRadius: "10px", objectFit: "contain" }}
-                                                            className="d-block w-100"
-                                                            src={imgInfo.postImgUrl}
-                                                            alt={`slide${i + 1}`}
-                                                        />
-                                                    </Carousel.Item>
-                                                )
-                                            })}
-
-                                    {fileUrls.map((imgUrl, i) => {
+                                    post.postImgInfo !== undefined &&
+                                    post.postImgInfo.map((imgInfo, i) => {
                                         return (
-                                            <Carousel.Item key={imgUrl.id}>
+                                            <Carousel.Item key={i}>
                                                 <img style={{ width: "100%", height: "396px", borderRadius: "10px", objectFit: "contain" }}
                                                     className="d-block w-100"
-                                                    src={imgUrl}
+                                                    src={imgInfo.postImgUrl}
                                                     alt={`slide${i + 1}`}
                                                 />
                                             </Carousel.Item>
                                         )
                                     })}
-                                </Carousel>
+                            </Carousel>
+                        </StCarouselWrap>
 
-                                {modPost.postImgInfo.map((imgInfo, i) => {
+                        <StContent ref={textRef} onInput={handleResize} row={10}>{post.content}</StContent>
+                        {
+                            post.postLink !== "" && (
+                                <>
+                                    <div>관련 링크</div>
+                                    <STInput style={{ marginBottom: "14px", minHeight: "40px" }}>
+                                        <a href={post.postLink} target="_blank">{post.postLink}</a>
+                                    </STInput>
+                                </>
+                            )
+                        }
+                        {
+                            modPost.postAddress && (
+                                <>
+                                    <div>행사장소</div>
+                                    <div style={{ display: "flex", marginBottom: "8px" }}>
+                                        <STAddressButton style={{ flex: "2" }}>#{modPost.postAddress.split('')[0] + modPost.postAddress.split('')[1]}</STAddressButton>
+                                        <STInput style={{ flex: "8", marginLeft: "5px" }}>{post.postAddress}</STInput>
+                                    </div>
+                                </>
+                            )
+                        }
+                        <KakaoMap address={post.postAddress} width='100%' height='144px' />
+
+                        {localStorage.getItem('userId') === post.userId.toString() &&
+                            (<div>
+                                <STEditButton style={{ background: "#515466", marginLeft: "5px" }} onClick={() => { onEventDelete(postId); }}>삭제</STEditButton>
+                                <STEditButton onClick={() => { setMod(true) }}>수정</STEditButton>
+                            </div>)}
+
+                        {/* <textarea ref={textRef} onInput={handleResize} /> */}
+                    </>
+                :
+                modPost !== undefined &&
+                <>
+                    <h4 style={{ textAlign: "center", marginTop: "18px", marginBottom: "18px" }}>행사글</h4>
+                    <STTitleInput type='text' name='title' value={modPost.title || ""} onChange={modPostHandle} />
+
+                    <StCarouselWrap>
+
+                        <Carousel>
+                            {delImg === "" || modPost.postImgInfo.length - delImg.length > 0 && modPost.postImgInfo[0].postImgId !== null &&
+                                modPost.postImgInfo
+                                    .filter((item, i) => delImg.indexOf(item.postImgId) === -1)
+                                    .map((imgInfo, i) => {
+                                        return (
+
+                                            <Carousel.Item key={imgInfo.id}>
+                                                <img style={{ width: "100%", height: "396px", borderRadius: "10px", objectFit: "contain" }}
+                                                    className="d-block w-100"
+                                                    src={imgInfo.postImgUrl}
+                                                    alt={`slide${i + 1}`}
+                                                />
+                                            </Carousel.Item>
+                                        )
+                                    })}
+
+                            {fileUrls.map((imgUrl, i) => {
+                                return (
+                                    <Carousel.Item key={imgUrl.id}>
+                                        <img style={{ width: "100%", height: "396px", borderRadius: "10px", objectFit: "contain" }}
+                                            className="d-block w-100"
+                                            src={imgUrl}
+                                            alt={`slide${i + 1}`}
+                                        />
+                                    </Carousel.Item>
+                                )
+                            })}
+                        </Carousel>
+
+                        {modPost.postImgInfo.map((imgInfo, i) => {
+                            return (
+                                imgInfo.postImgId &&
+                                <button style={{ display: delImg.indexOf(imgInfo.postImgId) > -1 ? "none" : "inline-block" }}
+                                    onClick={() => delImgHandle(imgInfo.postImgId)} key={i}>
+                                    <img style={{ width: '60px', height: '60px' }} src={imgInfo.postImgUrl} />
+                                </button>
+                            )
+                        })}
+                        <STUploadButton onClick={() => { imgRef.current.click() }}>+</STUploadButton>
+
+                        <label htmlFor="imgFile">
+                            <input
+                                style={{ display: "none" }}
+                                type="file"
+                                id="imgFile"
+                                onChange={uploadHandle}
+                                accept="image/*"
+                                ref={imgRef}
+                                name="imgFile"
+                                multiple />
+                        </label>
+
+
+                        {
+                            fileUrls && fileUrls.map((imgUrl, index) => {
+                                return (
+                                    <button key={imgUrl} onClick={() => deleteNewFile(index)}>
+                                        <img style={{ width: '60px', height: '60px' }} src={imgUrl} alt="pre view" />
+                                    </button>
+                                )
+                            })
+                        }
+
+                    </StCarouselWrap>
+                    <div>* '+'버튼 옆에 있는 사진을 클릭하면 사진 선택이 취소됩니다.</div>
+                    <div style={{ display: "flex" }}>
+                        <STContentTextarea ref={textRef} onInput={handleResize} name='content' value={modPost.content || ""} onChange={modPostHandle} placeholder="행사글을 띄어쓰기 포함 2500자 이내로 입력해주세요" maxLength={2500}></STContentTextarea>
+                    </div>
+
+                    <StTypeBox>
+                        <label style={{ marginLeft: "10px", marginTop: "14px" }}>카테고리</label>
+                        <SelTop style={{ marginTop: "10px" }}>
+                            <STSelect defaultValue={modPost.category} name="category" onChange={modPostHandle}>
+                                {categoryOption.map((cate, i) => {
                                     return (
-                                        imgInfo.postImgId &&
-                                        <button style={{ display: delImg.indexOf(imgInfo.postImgId) > -1 ? "none" : "inline-block" }}
-                                            onClick={() => delImgHandle(imgInfo.postImgId)} key={i}>
-                                            <img style={{ width: '60px', height: '60px' }} src={imgInfo.postImgUrl} />
-                                        </button>
+                                        <option value={cate} key={i}>{cate}</option>
                                     )
                                 })}
-                                <STUploadButton onClick={() => { imgRef.current.click() }}>+</STUploadButton>
+                            </STSelect>
+                        </SelTop>
+                        <div style={{ display: "flex", marginLeft: "10px", marginBottom: "14px" }}>
+                            <div style={{ flex: "1" }}>시작 날짜</div>
+                            <div style={{ flex: "0.9" }}>마감 날짜</div>
+                        </div>
 
-                                <label htmlFor="imgFile">
-                                    <input
-                                        style={{ display: "none" }}
-                                        type="file"
-                                        id="imgFile"
-                                        onChange={uploadHandle}
-                                        accept="image/*"
-                                        ref={imgRef}
-                                        name="imgFile"
-                                        multiple />
-                                </label>
+                        <SelBottom style={{ marginBottom: "10px" }}>
+                            <STDateInput type="date" name="startPeriod" value={modPost.startPeriod || ""} onChange={modPostHandle} min={today2} />
+                            <STDateInput type="date" name="endPeriod" value={modPost.endPeriod || ""} onChange={modPostHandle} min={today2} />
+                        </SelBottom>
+                    </StTypeBox>
 
+                    <label style={{ marginLeft: "5px" }}>관련 링크</label>
+                    <STLinkTextarea type='text' name='postLink' value={modPost.postLink || ""} onChange={modPostHandle} />
 
-                                {
-                                    fileUrls && fileUrls.map((imgUrl, index) => {
-                                        return (
-                                            <button key={imgUrl} onClick={() => deleteNewFile(index)}>
-                                                <img style={{ width: '60px', height: '60px' }} src={imgUrl} alt="pre view" />
-                                            </button>
-                                        )
-                                    })
-                                }
+                    <StSearchBox style={{ background: "#E1E3EC" }} onClick={popupPostCode}>
+                        <button style={{ color: "#8B909F" }}><FiSearch style={{ width: '20px', height: '20px', color: '#424754', marginLeft: "10px", marginRight: "10px" }} />주소를 검색하려면 클릭해주세요</button>
+                    </StSearchBox>
 
-                            </StCarouselWrap>
-                            <div>* '+'버튼 옆에 있는 사진을 클릭하면 사진 선택이 취소됩니다.</div>
-                            <div style={{ display: "flex" }}>
-                                <STContentTextarea ref={textRef} onInput={handleResize} name='content' value={modPost.content || ""} onChange={modPostHandle} placeholder="행사글을 띄어쓰기 포함 2500자 이내로 입력해주세요" maxLength={2500}></STContentTextarea>
-                            </div>
+                    <div style={{ margin: "0px 20px" }}>
+                        {isAddressModal && (
+                            <ModalWrap onClick={popupPostCode}>
+                                <SearchAddress setPostAddres={setPostAddress} popupPostCode={popupPostCode} />
+                            </ModalWrap>
+                        )}
 
-                            <StTypeBox>
-                                <label style={{ marginLeft: "10px", marginTop: "14px" }}>카테고리</label>
-                                <SelTop style={{ marginTop: "10px" }}>
-                                    <STSelect defaultValue={modPost.category} name="category" onChange={modPostHandle}>
-                                        {categoryOption.map((cate, i) => {
-                                            return (
-                                                <option value={cate} key={i}>{cate}</option>
-                                            )
-                                        })}
-                                    </STSelect>
-                                </SelTop>
-                                <div style={{ display: "flex", marginLeft: "10px", marginBottom: "14px" }}>
-                                    <div style={{ flex: "1" }}>시작 날짜</div>
-                                    <div style={{ flex: "0.9" }}>마감 날짜</div>
-                                </div>
+                        {
+                            modPost.postAddress && (
+                                <>
+                                    <div style={{ display: "flex", marginTop: "14px" }}>
+                                        <STAddressDiv style={{ marginRight: "5px" }}>#{modPost.postAddress.split(' ')[0].length < 2 ? modPost.postAddress.split(' ')[0] : modPost.postAddress.split(' ')[0].substr(0, 2)}</STAddressDiv>
+                                        <STInput >{modPost.postAddress}</STInput>
+                                    </div>
+                                </>
+                            )
+                        }
+                        {
+                            modPost.postAddress !== post.postAddress && <STInput3 style={{ marginBottom: "10px" }} type="text" placeholder='상세주소' name="detailAddress" onChange={modPostHandle} />
+                        }
 
-                                <SelBottom style={{ marginBottom: "10px" }}>
-                                    <STDateInput type="date" name="startPeriod" value={modPost.startPeriod || ""} onChange={modPostHandle} min={today2} />
-                                    <STDateInput type="date" name="endPeriod" value={modPost.endPeriod || ""} onChange={modPostHandle} min={today2} />
-                                </SelBottom>
-                            </StTypeBox>
-
-                            <label style={{ marginLeft: "5px" }}>관련 링크</label>
-                            <STLinkTextarea type='text' name='postLink' value={modPost.postLink || ""} onChange={modPostHandle} />
-
-                            <StSearchBox style={{ background: "#E1E3EC" }} onClick={popupPostCode}>
-                                <button style={{ color: "#8B909F" }}><FiSearch style={{ width: '20px', height: '20px', color: '#424754', marginLeft: "10px", marginRight: "10px" }} />주소를 검색하려면 클릭해주세요</button>
-                            </StSearchBox>
-
-                            <div style={{ margin: "0px 20px" }}>
-                                {isAddressModal && (
-                                    <ModalWrap onClick={popupPostCode}>
-                                        <SearchAddress setPostAddres={setPostAddress} popupPostCode={popupPostCode} />
-                                    </ModalWrap>
-                                )}
-
-                                {
-                                    modPost.postAddress && (
-                                        <>
-                                            <div style={{ display: "flex", marginTop: "14px" }}>
-                                                <STAddressDiv style={{ marginRight: "5px" }}>#{modPost.postAddress.split(' ')[0].length < 2 ? modPost.postAddress.split(' ')[0] : modPost.postAddress.split(' ')[0].substr(0, 2)}</STAddressDiv>
-                                                <STInput >{modPost.postAddress}</STInput>
-                                            </div>
-                                        </>
-                                    )
-                                }
-                                {
-                                    modPost.postAddress !== post.postAddress && <STInput3 style={{ marginBottom: "10px" }} type="text" placeholder='상세주소' name="detailAddress" onChange={modPostHandle} />
-                                }
-
-                                <KakaoMap address={modPost.postAddress} width='100%' height='130px' />
-                            </div>
+                        <KakaoMap address={modPost.postAddress} width='100%' height='130px' />
+                    </div>
 
 
-                            <div>
-                                <STEditButton style={{ background: "#515466", marginLeft: "5px" }} onClick={() => setMod(false)}>취소</STEditButton>
-                                <STEditButton onClick={putPostSubmit}>수정완료</STEditButton>
-                            </div>
+                    <div>
+                        <STEditButton style={{ background: "#515466", marginLeft: "5px" }} onClick={() => setMod(false)}>취소</STEditButton>
+                        <STEditButton onClick={putPostSubmit}>수정완료</STEditButton>
+                    </div>
 
 
-                        </>
-                    }
-                    <Comment postId={postId} kind='event' style={{ marginTop: "20px" }} />
-                </StWrap >
+                </>
+            }
+            <Comment postId={postId} kind='event' style={{ marginTop: "20px" }} />
+        </StWrap >
     );
 };
 

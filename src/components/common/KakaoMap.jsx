@@ -17,7 +17,6 @@ const KakaoMap = (props) => {
     };
 
     useEffect(() => {
-        console.log("props.address", props.address);
         //주소 정보 검색
         geocoder.addressSearch(props.address, callback);
 

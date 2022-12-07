@@ -5,8 +5,11 @@ import loadingImg from '../../assets/images/common/spiner_hands.gif'
 import notFoundImg from '../../assets/images/common/spiner_eyes.gif'
 import failRequestImg from '../../assets/images/common/404.png'
 
-const PageState = (props) => {
+import { useNavigate } from 'react-router-dom';
+import Button from '../elements/Button';
 
+const PageState = (props) => {
+    const navigate = useNavigate();
     return (
         <StBackground
             display={props.display}
@@ -34,13 +37,20 @@ const PageState = (props) => {
             {
                 props.state === 'failRequest' &&
                 <StImg
-                    alt='failRequest'
-                    imgUrl={failRequestImg}
+                    alt='loading'
+                    imgUrl={loadingImg}
                     imgWidth={props.imgWidth}
                 />
             }
 
             <StText>{props.text}</StText>
+            {
+                props.state === 'failRequest' &&
+                <MyDoneBtnWrap>
+                    <Button btnType="submit" onClick={() => window.location.reload()}>재시도</Button>
+                    <Button btnType="submit" onClick={() => window.location.replace("/")}>홈으로 가기</Button>
+                </MyDoneBtnWrap>
+            }
         </StBackground>
     );
 };
@@ -71,4 +81,11 @@ const StText = styled.div`
 font-weight : bold;
 margin-top : 10px;
 text-align: center;
+`;
+
+const MyDoneBtnWrap = styled.div`
+  display: flex;
+  gap : 10px;
+  height: 56px;
+  margin : 50px 0 100px 0;
 `;

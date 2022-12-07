@@ -7,24 +7,24 @@ import { useNavigate } from 'react-router-dom';
 function Alram() {
 
     const navigate = useNavigate();
+
+    //알림 불러오기
+    const getNotice = async () => {
+        const res = await notificationApis.getNotificationAX();
+        return res;
+    }
+    const result = useQuery(
+        ["getNotice"],
+        getNotice,
+    );
+
     //알림 server state
-    const [noticeList, setNoticeList] = useState([]);
-    //알림 리스트
-    const { refetch } = useQuery(['getNoticeList'], //key
-        () => notificationApis.getNotificationAX(),
-        {//options
-            refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-            retry: 0, // 실패시 재호출 몇번 할지
-            onSuccess: res => { // 성공시 호출
-                if (res.data.status === 200) {
-                    setNoticeList(res.data.data);
-                }
-            }
-        })
+    const [noticeList, setNoticeList] = useState(result.data?.data?.data);
+
     //알림 읽고 해당 게시물로 이동
     const putNotice = useMutation({
-        mutationFn: id => {
-            return notificationApis.putNotificationAX(id);
+        mutationFn: async (id) => {
+            return await notificationApis.putNotificationAX(id);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
@@ -38,12 +38,12 @@ function Alram() {
 
     //알림 삭제
     const deleteNotice = useMutation({
-        mutationFn: id => {
-            return notificationApis.deleteNotificationAX(id);
+        mutationFn: async (id) => {
+            return await notificationApis.deleteNotificationAX(id);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
-                refetch();
+                result.refetch();
             }
         },
     })
@@ -51,15 +51,12 @@ function Alram() {
         deleteNotice.mutate(id);
     }
 
-    useEffect(() => {
-        console.log("noticeList", noticeList);
-    }, [noticeList])
-
-    console.log(noticeList)
-
+    if (result.isLoading) {
+        return null;
+    }
     return (
         <>
-            {noticeList === null ?
+            {noticeList === undefined || noticeList.length === 0 ?
                 (<STDiv>
                     <STContent>알림 내용이 없습니다❗</STContent>
                 </STDiv>) :

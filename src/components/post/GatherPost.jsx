@@ -70,8 +70,8 @@ const GatherPost = () => {
 
     //게시글 작성
     const insertGatherPost = useMutation({
-        mutationFn: obj => {
-            return postApis.addGatherPostAx(obj);
+        mutationFn: async (obj) => {
+            return await postApis.addGatherPostAx(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {

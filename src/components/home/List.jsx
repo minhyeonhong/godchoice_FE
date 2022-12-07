@@ -33,7 +33,6 @@ const List = ({ searchState }) => {
             if (!isLastPage) return nextPage;
         },
         refetchOnWindowFocus: false,
-        retry: 0,
     })
 
     useEffect(() => {
@@ -48,10 +47,9 @@ const List = ({ searchState }) => {
         if (!result.isFetching) result.refetch(searchState, 0);
     }, [searchState])
 
-    useEffect(() => {
-        console.log("main result", result);
-    }, [result])
-
+    if (result.isLoading) {
+        return null;
+    }
     return (
         <StCardWrap>
             <PageState display={result.data?.pages[0].postList.length === 0 ? 'flex' : 'none'} state='notFound' imgWidth='25%' height='60vh'

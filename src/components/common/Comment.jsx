@@ -11,20 +11,17 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 const Comment = ({ postId, kind }) => {
 
-    //댓글 server state
-    const [comments, setComments] = useState([]);
     //댓글 불러오기
-    useQuery(['comments', { postId, kind }],
-        () => commentApis.getCommentAX({ postId, kind }), //fn
-        {//options
-            refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-            retry: 0, // 실패시 재호출 몇번 할지
-            onSuccess: res => {
-                if (res.data.status === 200) {
-                    setComments(res.data.data);
-                }
-            }
-        })
+    const getComments = async () => {
+        const res = await commentApis.getCommentAX({ postId, kind });
+        return res;
+    }
+    const result = useQuery(
+        ["comments", postId, kind],
+        getComments
+    );
+    // 댓글 server state
+    const comments = result.data?.data.data;
 
     //댓글 인풋
     const [comment, setComment, commentHandle] = useInput({
@@ -37,14 +34,14 @@ const Comment = ({ postId, kind }) => {
 
     //댓글 작성
     const insertMutation = useMutation({
-        mutationFn: obj => {
-            return commentApis.insertCommentAX(obj);
+        mutationFn: async (obj) => {
+            return await commentApis.insertCommentAX(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
-                setComments(res.data.data);
                 setComment({ content: "" });
                 setReComment({ content: "" });
+                result.refetch();
             }
         },
     })
@@ -69,12 +66,12 @@ const Comment = ({ postId, kind }) => {
 
     //댓글 삭제
     const deleteMutation = useMutation({
-        mutationFn: obj => {
-            return commentApis.deleteCommentAX(obj);
+        mutationFn: async (obj) => {
+            return await commentApis.deleteCommentAX(obj);
         },
         onSuccess: res => {
             if (res.data.status === 200) {
-                setComments(res.data.data);
+                result.refetch();
             }
         },
     })
@@ -92,6 +89,11 @@ const Comment = ({ postId, kind }) => {
         newArr[idx] = onOff;
         setOpenReComment(newArr);
     }
+
+    if (result.isLoading) {
+        return null;
+    }
+
     return (
         <StCommentWrap>
             <StCommentAddBox>

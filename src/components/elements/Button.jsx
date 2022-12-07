@@ -138,15 +138,15 @@ const StButton = styled.button`
       props.btnType === "tabMenu" &&
       css`
         width: 100%;
-        height: 60px;
+        height: 44px;
         box-sizing: border-box;Participation
         font-weight: 600;
-        font-size: 20px;
+        font-size: 18px;
         box-sizing: border-box;
         border: none;
-        background-color: transparent;
-        border-bottom: ${({ active, name }) => (active === name ? "6px solid #2D4FDA" : "6px solid #f2f2f2")};
-        color: ${({ active, name }) => (active === name ? "#222" : "grey")};
+        background-color: ${({ active, name }) => (active === name ? "#2D4FDA" : "#F4F5F7")};
+        /* border-bottom: ${({ active, name }) => (active === name ? "6px solid #2D4FDA" : "6px solid #f2f2f2")}; */
+        color: ${({ active, name }) => (active === name ? "#fff" : "#A7ABBB")};
       `
     );
   }}

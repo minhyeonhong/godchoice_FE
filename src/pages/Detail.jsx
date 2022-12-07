@@ -7,10 +7,6 @@ import Ask from '../components/detail/Ask';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
-import { postApis } from "../api/api-functions/postApis"
-import { useQuery } from "@tanstack/react-query";
-
-
 const Detail = () => {
     const { url, postId } = useParams();
 
