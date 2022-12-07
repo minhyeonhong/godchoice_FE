@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function Alram() {
 
     const navigate = useNavigate();
-
+    //const [noticeList, setNoticeList] = useState([]);
     //알림 불러오기
     const getNotice = async () => {
         const res = await notificationApis.getNotificationAX();
@@ -26,7 +26,7 @@ function Alram() {
     );
 
     //알림 server state
-    const [noticeList, setNoticeList] = useState(result.data?.data?.data);
+    const [noticeList, setNoticeList] = useState([...result.data?.data?.data]);
 
     //알림 읽고 해당 게시물로 이동
     const putNotice = useMutation({
@@ -50,7 +50,7 @@ function Alram() {
         },
         onSuccess: res => {
             if (res.data.status === 200) {
-                setNoticeList(res.data.data);
+                //setNoticeList(res.data.data);
                 result.refetch();
             }
         },
@@ -64,7 +64,7 @@ function Alram() {
     }
     return (
         <>
-            {noticeList === undefined || noticeList.length === 0 ?
+            {noticeList === undefined || noticeList?.length === 0 ?
                 (<STDiv>
                     <STContent>알림 내용이 없습니다❗</STContent>
                 </STDiv>) :

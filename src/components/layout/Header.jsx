@@ -20,7 +20,7 @@ const Header = () => {
     //로그인 여부
     const isLogin = localStorage.getItem('token') !== null;
 
-
+    //const [alramNum, setAlarmNum] = useState(0);
     //알림 불러오기
     const getNotice = async () => {
         const res = await notificationApis.getNotificationAX();
@@ -80,10 +80,6 @@ const Header = () => {
                 if (isJson(event.data)) {
                     //알림 리스트 refetch
                     result.refetch();
-
-                    setAlarmNum(
-                        result.data?.data?.data?.filter((notice) => { return !notice.readStatus }).length
-                    )
                     //실시간 알림 데이터
                     const obj = JSON.parse(event.data);
                     setNewNotice(obj);
