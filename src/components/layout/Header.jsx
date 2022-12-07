@@ -33,7 +33,7 @@ const Header = () => {
                 if (res.data.status === 200 && res.data.data !== null) {
                     const resList = res.data.data;
                     const unReadNum = resList.filter((notice) => { return !notice.readStatus }).length;
-                    if (unReadNum !== undefined) setAlarmNum(unReadNum);
+                    setAlarmNum(unReadNum);
                 }
             }
         }

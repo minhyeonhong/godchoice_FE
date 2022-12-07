@@ -21,7 +21,14 @@ export const instance = axios.create({
 
 // 응답 인터셉터 추가하기
 instance.interceptors.response.use(function (response) {
-    return response;
+    switch (response.data?.status) {
+        case 404:
+            alert(response.data?.msg);
+            window.location.replace("/");
+            break;
+        default:
+            return response;
+    }
 }, async function (error) {
     console.log("interceptors error", error);
     switch (error.response?.data.status) {
