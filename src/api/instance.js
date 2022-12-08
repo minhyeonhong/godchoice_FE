@@ -36,21 +36,6 @@ instance.interceptors.response.use(function (response) {
     }
 }, async function (error) {
     console.log("interceptors error", error);
-
-    console.log("interceptors error.response", error.response);
-    console.log("interceptors error?.response", error?.response);
-
-    console.log("test", error.response.status === 403);
-    console.log("test2", error.response?.status === 403);
-    console.log("test3", error?.response?.status === 403);
-
-    console.log("test4", error.response.status === "403");
-    console.log("test5", error.response?.status === "403");
-    console.log("test6", error?.response?.status === "403");
-
-    if (error.response.status === 403) {
-        console.log("if error 403", error.response);
-    }
     switch (error.response.status) {
         // case 400:
         //     break;
