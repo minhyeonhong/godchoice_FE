@@ -36,10 +36,11 @@ instance.interceptors.response.use(function (response) {
     }
 }, async function (error) {
     console.log("interceptors error", error);
-    switch (error.response?.status) {
+    switch (error?.response?.status) {
         // case 400:
         //     break;
         case 403:
+            console.log("interceptors error 403", error.response);
             // console.log("인터셉터 403 error", error);
             // const refreshToken = localStorage.getItem('refreshToken');
             // const token = localStorage.getItem('token');
