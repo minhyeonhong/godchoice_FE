@@ -36,6 +36,7 @@ instance.interceptors.response.use(function (response) {
     }
 }, async function (error) {
     console.log("interceptors error", error);
+    console.log(error.response.status === 403);
     if (error.response.status === 403) {
         console.log("if error 403", error.response);
     }
