@@ -10,8 +10,8 @@ const Footer = () => {
                 <img src={home_logo_fill} alt="logo" style={{ width: "180px", padding: "15px" }} />
             </div>
             <ul style={{ display: "flex", gap: "12px" }} >
-                <li style={{ width: "35px", height: "35px" }} onClick={() => { window.open('https://github.com/minhyeonhong/last-project') }}> <img src={logo_git} style={{ width: "33px", height: "33px" }} /> <p style={{ fontSize: "13px", textAlign: "center", maragin: "0 auto" }} >FE</p> </li>
-                <li style={{ width: "35px", height: "35px " }} onClick={() => { window.open('https://github.com/godchoice-project/godchoice_BE') }}> <img src={logo_git} style={{ width: "33px", height: "33px " }} /> <p style={{ fontSize: "13px", textAlign: "center", maragin: "0 auto" }}>BE</p></li>
+                <li style={{ width: "35px", height: "35px" }} onClick={() => { window.open('https://github.com/minhyeonhong/last-project') }}> <img src={logo_git} style={{ width: "33px", height: "33px" }} alt="logo" /> <p style={{ fontSize: "13px", textAlign: "center", maragin: "0 auto" }} >FE</p> </li>
+                <li style={{ width: "35px", height: "35px " }} onClick={() => { window.open('https://github.com/godchoice-project/godchoice_BE') }}> <img src={logo_git} style={{ width: "33px", height: "33px " }} alt="logo" /> <p style={{ fontSize: "13px", textAlign: "center", maragin: "0 auto" }}>BE</p></li>
 
             </ul>
             <StCopyright>Copyright ⓒ E1I6 All Rights Reserved.</StCopyright>

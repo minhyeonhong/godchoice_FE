@@ -9,8 +9,8 @@ function EventSurvey() {
         <>
             <Layout>
                 <Title>✨<STBrand>거기어때</STBrand>의 설문조사 이벤트✨</Title>
-                <img src={eventimage1} style={{ width: "100%", margin: "0 auto" }} />
-                <img src={eventimage2} style={{ width: "100%", margin: "0 auto" }} />
+                <img src={eventimage1} style={{ width: "100%", margin: "0 auto" }} alt="event image 01" />
+                <img src={eventimage2} style={{ width: "100%", margin: "0 auto" }} alt="event image 02" />
 
                 <STBox>
                     <br />안녕하세요! <STBrand>거기어때</STBrand>입니다 :)<br /><br />

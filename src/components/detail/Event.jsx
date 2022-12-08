@@ -184,7 +184,7 @@ const Event = ({ postId, url }) => {
                                     <STImg>
                                         <div style={{ background: "white", width: "70px", height: "45px" }}>
                                             <div style={{ margin: "0 5px 0 18px", paddingTop: "10px" }}>
-                                                <img src={Views} style={{ width: "20px", height: "20px", flex: "2", marginRight: "4px" }} />
+                                                <img src={Views} style={{ width: "20px", height: "20px", flex: "2", marginRight: "4px" }} alt="views icon" />
                                                 {post.viewCount}
                                             </div>
                                         </div>
@@ -207,7 +207,7 @@ const Event = ({ postId, url }) => {
                         </STBox2>
 
                         <div style={{ margin: "10px 0" }}>
-                            <img src={post.userImg} style={{ width: "36px", height: "36px", borderRadius: "30px" }} />
+                            <img src={post.userImg} style={{ width: "36px", height: "36px", borderRadius: "30px" }} alt="user iamage" />
                             <STUsername>{post.username}</STUsername>
                         </div>
 
@@ -316,7 +316,7 @@ const Event = ({ postId, url }) => {
                                 imgInfo.postImgId &&
                                 <button style={{ display: delImg.indexOf(imgInfo.postImgId) > -1 ? "none" : "inline-block" }}
                                     onClick={() => delImgHandle(imgInfo.postImgId)} key={i}>
-                                    <img style={{ width: '60px', height: '60px' }} src={imgInfo.postImgUrl} />
+                                    <img style={{ width: '60px', height: '60px' }} src={imgInfo.postImgUrl} alt={"post image" + i} />
                                 </button>
                             )
                         })}
@@ -339,7 +339,7 @@ const Event = ({ postId, url }) => {
                             fileUrls && fileUrls.map((imgUrl, index) => {
                                 return (
                                     <button key={imgUrl} onClick={() => deleteNewFile(index)}>
-                                        <img style={{ width: '60px', height: '60px' }} src={imgUrl} alt="pre view" />
+                                        <img style={{ width: '60px', height: '60px' }} src={imgUrl} alt={"pre view" + index} />
                                     </button>
                                 )
                             })

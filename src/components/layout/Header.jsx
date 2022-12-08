@@ -117,7 +117,7 @@ const Header = () => {
 
             <StHeaderWrap>
 
-                <StLogoBox> <Link to="/"> <img src={logo} style={{ width: '166px' }} /></Link></StLogoBox>
+                <StLogoBox> <Link to="/"> <img src={logo} style={{ width: '166px' }} alt="logo" /></Link></StLogoBox>
                 <StRightBox>
                     {localStorage.getItem("token") === null ?
                         <RiLoginBoxLine style={{ width: '32px', height: "48px", marginRight: "15px", padding: "2px", color: '#00208F', cursor: "pointer" }}

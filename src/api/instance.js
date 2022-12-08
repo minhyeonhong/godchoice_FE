@@ -36,7 +36,7 @@ instance.interceptors.response.use(function (response) {
     }
 }, async function (error) {
     console.log("interceptors error", error);
-    switch (error.response?.data.status) {
+    switch (error.response?.status) {
         // case 400:
         //     break;
         case 403:

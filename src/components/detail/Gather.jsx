@@ -239,7 +239,7 @@ const Gather = ({ postId, url }) => {
                                         imgInfo.postImgId &&
                                         <button style={{ display: delImg.indexOf(imgInfo.postImgId) > -1 ? "none" : "inline-block" }}
                                             onClick={() => delImgHandle(imgInfo.postImgId)} key={i}>
-                                            <img style={{ width: '60px', height: '60px' }} src={imgInfo.postImgUrl} />
+                                            <img style={{ width: '60px', height: '60px' }} src={imgInfo.postImgUrl} alt={"post image" + i} />
                                         </button>
                                     )
                                 })}
@@ -262,7 +262,7 @@ const Gather = ({ postId, url }) => {
                                     fileUrls && fileUrls.map((imgUrl, i) => {
                                         return (
                                             <button key={imgUrl} onClick={() => deleteNewFile(i)}>
-                                                <img style={{ width: '60px', height: '60px' }} src={imgUrl} alt="pre view" />
+                                                <img style={{ width: '60px', height: '60px' }} src={imgUrl} alt={"pre view" + i} />
                                             </button>
                                         )
                                     })
@@ -411,7 +411,7 @@ const Gather = ({ postId, url }) => {
                                             <STImg>
                                                 <div style={{ background: "white", width: "70px", height: "45px" }}>
                                                     <div style={{ margin: "0 5px 0 18px", paddingTop: "10px" }}>
-                                                        <img src={Views} style={{ width: "20px", height: "20px", flex: "2", marginRight: "4px" }} />
+                                                        <img src={Views} style={{ width: "20px", height: "20px", flex: "2", marginRight: "4px" }} alt="views icon" />
                                                         {post.viewCount}
                                                     </div>
                                                 </div>
@@ -433,9 +433,9 @@ const Gather = ({ postId, url }) => {
                                 <STBox2 style={{ marginBottom: "14px", display: "flex" }}>
                                     <STButton2 style={{ width: "159px", flex: "2", padding: "0 3px", fontSize: "15px" }}>모집인원 | {post.number}명</STButton2>
                                     <STButton2 style={{ width: "67px", flex: "1", padding: "0 3px", fontSize: "15px" }}>
-                                        {post.sex === 'M' && <img src={GenderMale} />}
-                                        {post.sex === 'W' && <img src={GenderFemale} />}
-                                        {post.sex === 'NF' && <img src={GenderIntersex} />}
+                                        {post.sex === 'M' && <img src={GenderMale} alt="male icon" />}
+                                        {post.sex === 'W' && <img src={GenderFemale} alt="female icon" />}
+                                        {post.sex === 'NF' && <img src={GenderIntersex} alt="gender free icon" />}
                                     </STButton2>
                                     <STButton2 style={{ width: "162px", flex: "2", padding: "0 3px", fontSize: "15px" }}>나이대 | {post.startAge}~{post.endAge}</STButton2>
                                 </STBox2>
@@ -449,7 +449,7 @@ const Gather = ({ postId, url }) => {
                                                 return (
                                                     <Carousel.Item key={img.id + i}>
                                                         <img style={{ width: "100%", height: "396px", objectFit: "contain" }}
-                                                            src={img.postImgUrl} />
+                                                            src={img.postImgUrl} alt={"post image" + i} />
                                                     </Carousel.Item>)
                                             })
                                         }
