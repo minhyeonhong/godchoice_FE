@@ -26,6 +26,11 @@ instance.interceptors.response.use(function (response) {
             alert(response.data?.msg);
             window.location.replace("/");
             break;
+        case 403:
+            alert("로그인 시간이 만료되었습니다.\n다시 로그인 해주세요.");
+            localStorage.clear();
+            window.location.replace("/login");
+            break;
         default:
             return response;
     }
@@ -36,13 +41,13 @@ instance.interceptors.response.use(function (response) {
         //     break;
         case 403:
             // console.log("인터셉터 403 error", error);
-            const refreshToken = localStorage.getItem('refreshToken');
-            const token = localStorage.getItem('token');
-            if (token !== null && refreshToken !== null) {
-                alert("로그인 시간이 만료되었습니다.\n다시 로그인 해주세요.");
-                localStorage.clear();
-                window.location.replace("/login");
-            }
+            // const refreshToken = localStorage.getItem('refreshToken');
+            // const token = localStorage.getItem('token');
+            // if (token !== null && refreshToken !== null) {
+            alert("로그인 시간이 만료되었습니다.\n다시 로그인 해주세요.");
+            localStorage.clear();
+            window.location.replace("/login");
+            // }
             //     // const res = await axios.get(`${process.env.REACT_APP_API_URL}/member/signup/issue/token`, {
             //     //     headers: {
             //     //         "Refresh_Token": refreshToken
