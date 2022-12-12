@@ -112,7 +112,9 @@ const StCardItem = styled.div`
 const StImgBox = styled.div`
         width:130px;
         height:130px;
-        background-size : 130px 130px;
+        background-size :contain;
+        background-repeat: no-repeat;
+        background-position: center center;
         background-image : url(${(props) => props.imgUrl});
         border-radius : 20px;
         border: 0.5px solid #F4F5F7;

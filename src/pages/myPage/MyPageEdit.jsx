@@ -40,6 +40,7 @@ const MyPageEdit = () => {
     {
       onSuccess: res => {
         if (res.data.status === 200) {
+          localStorage.setItem("userImgUrl", res.data.data.userImg);
           localStorage.setItem('userAddressTag', res.data.data.addressTag);
         }
       }
@@ -56,6 +57,7 @@ const MyPageEdit = () => {
     },
     onSuccess: res => {
       if (res.data.status === 200) {
+        localStorage.setItem("userImgUrl", res.data.data.userImg);
         localStorage.setItem('userAddressTag', res.data.data.addressTag);
         navigate("/mypage");
       }

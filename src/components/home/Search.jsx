@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import Form from 'react-bootstrap/Form';
 import { FiSearch } from 'react-icons/fi';
@@ -26,7 +26,11 @@ const Search = ({ searchState, setSearchState, search, searchHandle }) => {
     const sortHandle = (e) => {
         setSearchState({ ...searchState, [e.target.name]: e.target.value });
     }
-
+    const scrollRef = useRef(null);
+    const onHomeClick = () => {
+        console.log("scrollRef", scrollRef.scrollTop);
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
     return (
         <StSearchWrap>
             <StSearchBox>
@@ -40,12 +44,12 @@ const Search = ({ searchState, setSearchState, search, searchHandle }) => {
                         }
                     }} />
             </StSearchBox>
-            <StTagBox>
+            <StTagBox ref={scrollRef}>
                 <ToggleButtonGroup type="checkbox" value={searchState.tag} onChange={tagHandle}>
                     {searchState.main !== 'ask' &&
                         tagList.map((tag, i) => {
                             return (
-                                <ToggleButton id={`tbg-btn-${i + 1}`} value={tag} key={i}>
+                                <ToggleButton id={`tbg-btn-${i + 1}`} onClick={onHomeClick} value={tag} key={i}>
                                     #{tag}
                                 </ToggleButton>
                             )

@@ -5,6 +5,7 @@ import PageState from "../components/common/PageState";
 const Kakao = lazy(() => import("../components/login/Kakao"))
 const Naver = lazy(() => import("../components/login/Naver"))
 const Google = lazy(() => import("../components/login/Google"))
+const Github = lazy(() => import("../components/login/Github"))
 const Home = lazy(() => import("../pages/Home"))
 const LoginPage = lazy(() => import("../pages/LoginPage"))
 const Post = lazy(() => import("../pages/Post"))
@@ -19,7 +20,6 @@ const FestivalPost = lazy(() => import("../components/post/FestivalPost"))
 const GatherPost = lazy(() => import("../components/post/GatherPost"))
 const QuestionPost = lazy(() => import("../components/post/QuestionPost"))
 const EventSurvey = lazy(() => import("../components/home/EventSurvey"))
-const Alram = lazy(() => import("../components/home/Alram"))
 
 
 const Router = () => {
@@ -41,6 +41,8 @@ const Router = () => {
                     <Route path="/member/signup/naver" element={<Naver />} />
                     {/* 구글 로그인 --- Redirect_URI 경로로 넣기*/}
                     <Route path="/member/signup/google" element={<Google />} />
+                    {/* 깃허브 로그인 --- Redirect_URI 경로로 넣기*/}
+                    <Route path="/member/signup/github" element={<Github />} />
 
                     {/* 디테일 페이지 */}
                     <Route path="/:url/:postId" element={<Detail />} />

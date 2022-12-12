@@ -7,26 +7,19 @@ import { useNavigate } from 'react-router-dom';
 function Alram() {
 
     const navigate = useNavigate();
-    //const [noticeList, setNoticeList] = useState([]);
     //알림 불러오기
     const getNotice = async () => {
         const res = await notificationApis.getNotificationAX();
-        return res;
+        const resList = res.data.data;
+        const unReadNum = resList?.filter((notice) => { return !notice.readStatus }).length;
+        return { resList, unReadNum };
     }
+    //알림 server state
     const result = useQuery(
         ["getNotice"],
         getNotice,
-        {
-            onSuccess: res => {
-                if (res.data.status === 200) {
-                    setNoticeList(res.data.data);
-                }
-            },
-        }
     );
 
-    //알림 server state
-    const [noticeList, setNoticeList] = useState([...result.data?.data?.data]);
 
     //알림 읽고 해당 게시물로 이동
     const putNotice = useMutation({
@@ -64,13 +57,13 @@ function Alram() {
     }
     return (
         <>
-            {noticeList === undefined || noticeList?.length === 0 ?
+            {result.data.resList.length === 0 ?
                 (<STDiv>
                     <STContent>알림 내용이 없습니다❗</STContent>
                 </STDiv>) :
                 (
                     <STDiv>
-                        {noticeList?.filter((filterList) => filterList.readStatus === false)
+                        {result.data.resList?.filter((filterList) => filterList.readStatus === false)
                             .map((comment, index) => {
                                 return (
                                     <div key={index}>
@@ -89,7 +82,7 @@ function Alram() {
                                     </div>
                                 )
                             })}
-                        {noticeList?.filter((filterList) => filterList.readStatus === true)
+                        {result.data.resList?.filter((filterList) => filterList.readStatus === true)
                             .map((comment, index) => {
                                 return (
                                     <div key={index}>

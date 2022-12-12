@@ -20,3 +20,5 @@ export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id
 export const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${REACT_APP_NAVER_CLIENT_ID}&redirect_uri=${REACT_APP_NAVER_REDIRECT_URI}&state=hello
   `;
 
+export const GITHUB_AUTH_URL = `https://github.com/login/oauth/authorize?client_id=f14d4b05051c9f93b0e9&redirect_uri=http://localhost:3000/member/signup/github`;
+
