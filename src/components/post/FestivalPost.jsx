@@ -86,7 +86,6 @@ const FestivalPost = () => {
             postLink: festival.postLink,
         }
 
-        console.log(obj)
         if (isAdmin) {
             if (originFiles.length > 0) {
                 originFiles.forEach((file) => {
@@ -169,7 +168,7 @@ const FestivalPost = () => {
                     </Form.Group>
 
                     {/*이미지 부분*/}
-                    {fileUrls.length === 0 && <img src={noImg} style={{ width: "100%" }} onClick={() => { imgRef.current.click() }} />}
+                    {fileUrls.length === 0 && <img src={noImg} style={{ width: "100%" }} onClick={() => { imgRef.current.click() }} alt="no image" />}
 
                     <div>
                         <label htmlFor="files">

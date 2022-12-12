@@ -7,4 +7,6 @@ export const memberApis = {
     naverLoginAX: (loginInfo) => instance.get(`/member/signup/naver?code=${loginInfo.code}&state=${loginInfo.state}`),
     /**구글 로그인 */
     googleLoginAX: (code) => instance.get(`/member/signup/google?code=${code}`),
+    /**깃허브 로그인 */
+    githubLoginAX: (code) => instance.get(`/member/signup/github?code=${code}`),
 }

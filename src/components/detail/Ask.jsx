@@ -190,7 +190,7 @@ const Ask = ({ postId, url }) => {
                                         // <button style={{ width: '60px', height: '60px', backgroundImage: `url(${imgInfo.postImgUrl})` }} ></button>
                                         <button style={{ display: delImg.indexOf(img.postImgId) > -1 ? "none" : "inline-block" }}
                                             onClick={() => delImgHandle(img.postImgId)} key={img.postImgId}>
-                                            <img style={{ width: '60px', height: '60px' }} src={img.postImgUrl} />
+                                            <img style={{ width: '60px', height: '60px' }} src={img.postImgUrl} alt={'post image' + i} />
                                         </button>
                                     )
                                 })}
@@ -214,7 +214,7 @@ const Ask = ({ postId, url }) => {
                                     fileUrls && fileUrls.map((imgUrl, i) => {
                                         return (
                                             <button key={imgUrl} onClick={() => deleteNewFile(i)}>
-                                                <img style={{ width: '60px', height: '60px' }} src={imgUrl} alt="pre view" />
+                                                <img style={{ width: '60px', height: '60px' }} src={imgUrl} alt={"pre view" + i} />
                                             </button>
                                         )
                                     })
@@ -291,7 +291,7 @@ const Ask = ({ postId, url }) => {
                                 <div>
                                     <STImg2>
                                         <div style={{ margin: "0 5px 0 18px", paddingTop: "10px" }}>
-                                            <img src={Views} style={{ width: "20px", height: "20px", flex: "2", marginRight: "4px" }} />
+                                            <img src={Views} style={{ width: "20px", height: "20px", flex: "2", marginRight: "4px" }} alt="views icon" />
                                         </div>
                                         <div style={{ margin: "10px 20px 0 0 " }}> {post.viewCount}</div>
 
@@ -303,7 +303,7 @@ const Ask = ({ postId, url }) => {
 
                             </STIng>
                             <div style={{ marginBottom: "14px" }}>
-                                <img src={post.userImg} style={{ width: "36px", height: "36px", borderRadius: "30px" }} />
+                                <img src={post.userImg} style={{ width: "36px", height: "36px", borderRadius: "30px" }} alt="user image" />
                                 <STUsername>{post.userName}</STUsername>
                             </div>
 
@@ -317,7 +317,7 @@ const Ask = ({ postId, url }) => {
                                             return (
                                                 <Carousel.Item key={img.id + i}>
                                                     <Img style={{ width: "100%", height: "396px", borderRadius: "10px", objectFit: "contain" }}
-                                                        src={img.postImgUrl} />
+                                                        src={img.postImgUrl} alt={"ask post" + i} />
                                                 </Carousel.Item>)
                                         })
                                     }

@@ -11,47 +11,39 @@ import { notificationApis } from '../../api/api-functions/notificationApis';
 import Alram from '../home/Alram';
 import AlramAlert from '../home/AlramAlert';
 import { useQuery } from '@tanstack/react-query';
+import { alramState } from '../../recoil/atoms';
+import { useRecoilState } from 'recoil';
 const Header = () => {
 
     const navigate = useNavigate();
+    const [alram, setAlram] = useRecoilState(alramState);
 
-    //sse연결 여부
-    const [listening, setListening] = useState(false);
     //로그인 여부
     const isLogin = localStorage.getItem('token') !== null;
-
 
     //알림 불러오기
     const getNotice = async () => {
         const res = await notificationApis.getNotificationAX();
-        return res;
+        const resList = res.data.data;
+        const unReadNum = resList?.filter((notice) => { return !notice.readStatus }).length;
+        return { resList, unReadNum };
     }
-    const result = useQuery(['getNotice'], //key
-        getNotice,
-        {
-            onSuccess: res => {
-                if (res.data.status === 200 && res.data.data !== null) {
-                    const resList = res.data.data;
-                    const unReadNum = resList.filter((notice) => { return !notice.readStatus }).length;
-                    setAlarmNum(unReadNum);
-                }
-            }
-        }
-    )
-
     //알림 server state
-    const resList = result.data?.data?.data
-    const unReadNum = resList?.filter((notice) => { return !notice.readStatus }).length;
-    const [alramNum, setAlarmNum] = useState(0 || unReadNum);
+    const result = useQuery(
+        ['getNotice'],
+        getNotice,
+    )
 
     //sse handle
     const [newNotice, setNewNotice] = useState({})
 
+    //sse연결 여부
+    const isSSE = localStorage.getItem('sse') === "connect" ? true : false;
+
     //SSE 
-    let eventSource = undefined;
     useEffect(() => {
-        if (!listening && isLogin) {
-            eventSource = new EventSourcePolyfill(`${process.env.REACT_APP_API_URL}/subscribe`, {
+        if (!isSSE && isLogin) {
+            const eventSource = new EventSourcePolyfill(`${process.env.REACT_APP_API_URL}/subscribe`, {
                 headers: {
                     "Access_Token": localStorage.getItem("token"),
                     'Content-Type': 'text/event-stream',
@@ -62,7 +54,7 @@ const Header = () => {
             //sse 연결
             eventSource.onopen = (event) => {
                 if (event.status === 200) {
-                    setListening(true);
+                    localStorage.setItem('sse', "connect");
                 }
             };
 
@@ -80,34 +72,21 @@ const Header = () => {
                 if (isJson(event.data)) {
                     //알림 리스트 refetch
                     result.refetch();
-
-                    setAlarmNum(
-                        result.data?.data?.data?.filter((notice) => { return !notice.readStatus }).length
-                    )
                     //실시간 알림 데이터
                     const obj = JSON.parse(event.data);
-                    setNewNotice(obj);
+                    //setNewNotice(obj);
+                    setAlram(obj);
                 }
             };
 
             //sse 에러
             eventSource.onerror = event => {
-                if (eventSource !== undefined) {
-                    eventSource.close();
-                    setListening(false);
-                }
+                eventSource.close();
+                localStorage.setItem('sse', null);
             };
         }
 
-        return () => {
-            if (!isLogin && eventSource !== undefined) {
-                eventSource.close();
-                setListening(false);
-            }
-        };
     }, [isLogin]);
-
-
 
     const [notice, setNotice] = useState(false);
     const popUpNotice = () => {
@@ -116,12 +95,13 @@ const Header = () => {
     if (result.isLoading) {
         return null;
     }
+
     return (
         <>
 
             <StHeaderWrap>
 
-                <StLogoBox> <Link to="/"> <img src={logo} style={{ width: '166px' }} /></Link></StLogoBox>
+                <StLogoBox> <Link to="/"> <img src={logo} style={{ width: '166px' }} alt="logo" /></Link></StLogoBox>
                 <StRightBox>
                     {localStorage.getItem("token") === null ?
                         <RiLoginBoxLine style={{ width: '32px', height: "48px", marginRight: "15px", padding: "2px", color: '#00208F', cursor: "pointer" }}
@@ -129,7 +109,8 @@ const Header = () => {
                         :
                         <>
                             <StBell>
-                                {alramNum > 0 && <div className='bellNum'>{alramNum}</div>}
+                                {/* {alramNum > 0 && <div className='bellNum'>{alramNum}</div>} */}
+                                {result.data.unReadNum > 0 && <div className='bellNum'>{result.data.unReadNum}</div>}
                                 <Bell style={{ height: "48px", marginRight: "15px", padding: "2px", cursor: "pointer" }} onClick={popUpNotice} />
                             </StBell>
                             <MyPage style={{ height: "48px", marginRight: "5px", padding: "2px", cursor: "pointer" }}

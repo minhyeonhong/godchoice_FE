@@ -107,7 +107,7 @@ const QuestionPost = () => {
                     <STInput type="text" placeholder="제목" name="title" onChange={questionHandle}
                         style={{ width: "100%", marginBottom: "18px" }} />
 
-                    {fileUrls.length === 0 && <img src={noImg} style={{ width: "100%" }} onClick={() => { imgRef.current.click() }} />}
+                    {fileUrls.length === 0 && <img src={noImg} style={{ width: "100%" }} onClick={() => { imgRef.current.click() }} alt="no image" />}
                     <div>
                         <label htmlFor="files">
                             <input
@@ -125,7 +125,7 @@ const QuestionPost = () => {
                             {fileUrls && fileUrls.map((img, index) => {
                                 return (
                                     <Carousel.Item key={index}>
-                                        <img src={img} style={{ width: '396px', height: "396px", objectFit: "contain" }} onClick={() => { imgRef.current.click() }} />
+                                        <img src={img} style={{ width: '396px', height: "396px", objectFit: "contain" }} onClick={() => { imgRef.current.click() }} alt={"upload image" + index} />
                                     </Carousel.Item>
                                 )
                             })

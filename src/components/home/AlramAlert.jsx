@@ -1,21 +1,28 @@
-import { useMemo } from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-
+import { alramState } from "../../recoil/atoms";
+import { useRecoilState } from 'recoil';
 function AlramAlert({ newNotice, setNewNotice }) {
+    const [alram, setAlram] = useRecoilState(alramState);
+    // useEffect(() => {
+    //     if (newNotice.title !== undefined) {
+    //         setTimeout(() => { setNewNotice({}) }, 4000);
+    //     }
+    //     console.log("component newNotice", newNotice);
+    // }, [newNotice])
 
     useEffect(() => {
-        if (newNotice.title !== undefined) {
-            setTimeout(() => { setNewNotice({}) }, 4000);
+        if (alram.title !== undefined) {
+            setTimeout(() => { setAlram({}) }, 4000);
         }
-    }, [newNotice])
+    }, [alram])
 
     return (
         <>
             {
-                newNotice.title !== undefined ? (
+                alram.title !== undefined ? (
                     <STBox>
-                        💬 <b>{newNotice.title}</b>님이 댓글을 입력하셨습니다.
+                        💬 <b>{alram.title}</b>님이 댓글을 입력하셨습니다.
                     </STBox>
                 ) : null
             }

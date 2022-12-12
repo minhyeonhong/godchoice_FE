@@ -161,7 +161,7 @@ const GatherPost = () => {
                         <STInput type="text" placeholder="제목" name="title" onChange={gatherPostsHandle} style={{ width: "100%" }} />
                     </div>
 
-                    {fileUrls.length === 0 && <img src={noImg} style={{ width: "100%" }} onClick={() => { imgRef.current.click() }} />}
+                    {fileUrls.length === 0 && <img src={noImg} style={{ width: "100%" }} onClick={() => { imgRef.current.click() }} alt="no image" />}
 
                     <div >
                         <label htmlFor="files">
@@ -177,10 +177,10 @@ const GatherPost = () => {
                         </label>
                         <Carousel>
                             {
-                                fileUrls && fileUrls.map((img) => {
+                                fileUrls && fileUrls.map((img, i) => {
                                     return (
                                         <Carousel.Item key={img.id}>
-                                            <img style={{ width: '100%', height: "396px", objectFit: "contain" }} onClick={() => { imgRef.current.click() }} src={img} />
+                                            <img style={{ width: '100%', height: "396px", objectFit: "contain" }} onClick={() => { imgRef.current.click() }} src={img} alt={"upload image" + i} />
                                         </Carousel.Item>
                                     )
                                 })

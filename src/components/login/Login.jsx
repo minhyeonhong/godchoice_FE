@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "../elements/Button";
-import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL, NAVER_AUTH_URL } from "../../api/login";
+import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL, NAVER_AUTH_URL, GITHUB_AUTH_URL } from "../../api/login";
 import { flexColumn } from "../styles/Flex";
 import { GoogleBtn, KakaoBtn, NaverBtn } from "../../assets";
 import { Link } from "react-router-dom";
@@ -29,6 +29,7 @@ const Login = () => {
           <KakaoBtn style={{ width: "100%", cursor: "pointer" }} onClick={() => onClickHandler("k")} />
           <NaverBtn style={{ width: "100%", cursor: "pointer" }} onClick={() => onClickHandler("n")} />
           <GoogleBtn style={{ width: "100%", cursor: "pointer" }} onClick={() => onClickHandler("g")} />
+          {/* <button onClick={() => window.location.href = GITHUB_AUTH_URL}>github login</button> */}
         </Container>
       </LoginWrap>
     </>

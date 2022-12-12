@@ -21,21 +21,34 @@ export const instance = axios.create({
 
 // 응답 인터셉터 추가하기
 instance.interceptors.response.use(function (response) {
-    return response;
-}, async function (error) {
-    console.log("interceptors error", error);
-    switch (error.response?.data.status) {
-        case 400:
+    switch (response.data?.status) {
+        case 404:
+            alert(response.data?.msg);
+            window.location.replace("/");
             break;
         case 403:
+            alert("로그인 시간이 만료되었습니다.\n다시 로그인 해주세요.");
+            localStorage.clear();
+            window.location.replace("/login");
+            break;
+        default:
+            return response;
+    }
+}, async function (error) {
+    console.log("interceptors error", error);
+    switch (error.response.status) {
+        // case 400:
+        //     break;
+        case 403:
+            console.log("interceptors error 403", error.response);
             // console.log("인터셉터 403 error", error);
-            const refreshToken = localStorage.getItem('refreshToken');
-            const token = localStorage.getItem('token');
-            if (token !== null && refreshToken !== null) {
-                alert("로그인 시간이 만료되었습니다.\n다시 로그인 해주세요.");
-                localStorage.clear();
-                window.location.replace("/login");
-            }
+            // const refreshToken = localStorage.getItem('refreshToken');
+            // const token = localStorage.getItem('token');
+            // if (token !== null && refreshToken !== null) {
+            alert("로그인 시간이 만료되었습니다.\n다시 로그인 해주세요.");
+            localStorage.clear();
+            window.location.replace("/login");
+            // }
             //     // const res = await axios.get(`${process.env.REACT_APP_API_URL}/member/signup/issue/token`, {
             //     //     headers: {
             //     //         "Refresh_Token": refreshToken
@@ -50,10 +63,10 @@ instance.interceptors.response.use(function (response) {
             // }
 
             break;
-        case 404:
-            break;
-        case 500:
-            break;
+        // case 404:
+        //     break;
+        // case 500:
+        //     break;
         default:
             break;
     }
