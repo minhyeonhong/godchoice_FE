@@ -5,7 +5,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import { FiSearch } from 'react-icons/fi'
 import Form from 'react-bootstrap/Form';
 import {
-    STLinkTextarea, STTitleInput, ModalWrap, StWrap, STSelect, AllTextarea, StCarouselWrap, STUploadButton, STIng, STIngDiv, STInput, STButton, STButton2, STBox2, StContent, STAddressButton, STEditButton, STImg, SelectWrap, SelTop, SelBottom, STInput2, STInput3, StRadioBox, StSearchBox, STAddressDiv, STDiv, STCountButton
+    STLinkTextarea, STTitleInput, ModalWrap, StWrap, STSelect, StCarouselWrap, STUploadButton, STIng, STIngDiv, STInput, STButton, STButton2, STBox2, STAddressButton, STEditButton, STImg, SelectWrap, SelTop, SelBottom, STInput2, STInput3, StRadioBox, StSearchBox, STAddressDiv, STDiv, STCountButton
 } from '../styles/DetailPost.styled.js'
 import SearchAddress from '../post/SearchAddress';
 import useImgUpload from "../../hooks/useImgUpload";
@@ -202,7 +202,6 @@ const Gather = ({ postId, url }) => {
                             <h4 style={{ textAlign: "center", marginTop: "18px", marginBottom: "18px" }}>모집글</h4>
                             <STTitleInput style={{ height: "48px", marginBottom: "14px" }} type="text" placeholder="제목" name="title" defaultValue={modPost.title || ""} onChange={modPostHandle} />
 
-
                             {/*이미지 올리기*/}
                             <StCarouselWrap>
                                 <Carousel>
@@ -270,9 +269,6 @@ const Gather = ({ postId, url }) => {
 
                             </StCarouselWrap>
                             <div>* '+'버튼 옆에 있는 사진을 클릭하면 사진 선택이 취소됩니다.</div>
-                            {/* <AllTextarea style={{ width: "100%", height: "200px", marginTop: "14px",
-                             marginBottom: "14px" }} name="content"
-                             defaultValue={modPost.content || ""} onChange={modPostHandle} /> */}
 
                             <TextAreaAutoResize
                                 name='content' value={modPost.content || ""} onChange={modPostHandle}
@@ -455,7 +451,7 @@ const Gather = ({ postId, url }) => {
                                         }
                                     </Carousel>
                                 </div>
-                                {/* <StContent style={{ marginBottom: "14px", padding: "5px", borderRadius: "10px" }} value={post.content || ""} readOnly /> */}
+
                                 <TextAreaAutoResize
                                     defaultValue={post.content}
                                     minRows={10}

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Comment from '../common/Comment';
 import { FiSearch } from 'react-icons/fi';
 import {
-    STLinkTextarea, STInput3, ModalWrap, StWrap, StCarouselWrap, STUploadButton, StTypeBox, STIng, STIngDiv, STUsername, STInput, STButton, STBox2, StContent, STAddressButton, STEditButton, STImg, SelTop, SelBottom, STSelect, STDateInput, STTitleInput, StSearchBox, STAddressDiv
+    STLinkTextarea, STInput3, ModalWrap, StWrap, StCarouselWrap, STUploadButton, StTypeBox, STIng, STIngDiv, STUsername, STInput, STButton, STBox2, STAddressButton, STEditButton, STImg, SelTop, SelBottom, STSelect, STDateInput, STTitleInput, StSearchBox, STAddressDiv
 } from '../styles/DetailPost.styled.js'
 import useImgUpload from "../../hooks/useImgUpload";
 import Views from '../../assets/icon/Views.svg'
@@ -17,9 +17,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { postApis } from '../../api/api-functions/postApis';
 import useInput from '../../hooks/useInput';
 import PageState from '../common/PageState';
-import { useCallback } from 'react';
 import styled from 'styled-components';
-import { useMemo } from 'react';
 import TextAreaAutoResize from "react-textarea-autosize";
 
 const Event = ({ postId, url }) => {
@@ -160,6 +158,8 @@ const Event = ({ postId, url }) => {
             state='loading' imgWidth='25%' height='100vh'
             text='잠시만 기다려 주세요.' />;
     }
+
+    const today3 = modPost?.startPeriod
 
     return (
         <StWrap>
@@ -383,7 +383,7 @@ const Event = ({ postId, url }) => {
 
                         <SelBottom style={{ marginBottom: "10px" }}>
                             <STDateInput type="date" name="startPeriod" value={modPost.startPeriod || ""} onChange={modPostHandle} min={today2} />
-                            <STDateInput type="date" name="endPeriod" value={modPost.endPeriod || ""} onChange={modPostHandle} min={today2} />
+                            <STDateInput type="date" name="endPeriod" value={modPost.endPeriod || ""} onChange={modPostHandle} min={today3} />
                         </SelBottom>
                     </StTypeBox>
 
