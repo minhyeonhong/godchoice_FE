@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +11,6 @@ import { BookmarkFill, Comment, MyPost } from '../../assets';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { myPageApis } from '../../api/api-functions/myPageApis';
 import { postApis } from '../../api/api-functions/postApis';
-import { useEffect } from 'react';
 import PageState from '../../components/common/PageState';
 
 const MyPage = () => {
@@ -54,15 +53,9 @@ const MyPage = () => {
   // 로그아웃
   const handleLogout = () => {
     if (window.confirm("로그아웃 하시겠습니까?")) {
-      //logout.mutate(myInfo.domain);
-
-      // if (myInfo.domain === 'kakako') {
-      //   logout.mutate(myInfo.domain);
-      // } else {
       //네이버 구글 
       localStorage.clear();
       navigate("/");
-      //}
     }
   }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DaumPostcode from "react-daum-postcode";
 
 
@@ -18,13 +18,11 @@ function SearchAddress(props) {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    //props.onClose()
+
     props.setPostAddres(fullAddress)
     props.popupPostCode()
-    //setInputs(fullAddress)
-  };
 
-  //const [inputs, setInputs] = useState();
+  };
 
   return (
     <div>

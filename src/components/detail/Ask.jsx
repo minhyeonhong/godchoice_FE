@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Comment from '../common/Comment';
 import KakaoMap from '../common/KakaoMap';
 import Carousel from 'react-bootstrap/Carousel';
-import { StContent, STLinkTextarea, STUsername, StCarouselWrap, STUploadButton, STIng, STImg2, STAddressButton, STEditButton, StSearchBox, StWrap, STInput, STContentTextarea, STInput3, STAddressDiv, ModalWrap } from '../styles/DetailPost.styled.js'
+import { STLinkTextarea, STUsername, StCarouselWrap, STUploadButton, STIng, STImg2, STAddressButton, STEditButton, StSearchBox, StWrap, STInput, STInput3, STAddressDiv, ModalWrap } from '../styles/DetailPost.styled.js'
 
 import SearchAddress from '../post/SearchAddress';
 import useImgUpload from "../../hooks/useImgUpload";
@@ -224,7 +224,6 @@ const Ask = ({ postId, url }) => {
                             <div>* '+'버튼 옆에 있는 사진을 클릭하면 사진 선택이 취소됩니다.</div>
                         </div>
 
-                        {/* <STContentTextarea style={{ height: "200px", marginTop: "14px", marginBottom: "14px" }} type="text" name="content" defaultValue={modPost.content || ""} onChange={modPostHandle} /> */}
                         <TextAreaAutoResize
                             name='content' value={modPost.content || ""} onChange={modPostHandle}
                             defaultValue={post.content}
@@ -324,7 +323,6 @@ const Ask = ({ postId, url }) => {
                                 </Carousel>
                             </div>
 
-                            {/* <StContent style={{ marginBottom: "14px", padding: "5px", borderRadius: "10px" }} value={post.content || ""} readOnly /> */}
                             <TextAreaAutoResize
                                 defaultValue={post.content}
                                 minRows={10}

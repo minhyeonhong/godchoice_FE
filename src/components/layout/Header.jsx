@@ -34,8 +34,6 @@ const Header = () => {
         getNotice,
     )
 
-    //sse handle
-    const [newNotice, setNewNotice] = useState({})
 
     //sse연결 여부
     const isSSE = localStorage.getItem('sse') === "connect" ? true : false;
@@ -121,7 +119,7 @@ const Header = () => {
             </StHeaderWrap>
             {/* 알림 리스트 모달 */}
             {notice && <Alram />}
-            <AlramAlert newNotice={newNotice} setNewNotice={setNewNotice} />
+            <AlramAlert />
         </>
     );
 };

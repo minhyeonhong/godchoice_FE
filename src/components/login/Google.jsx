@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PageState from "../common/PageState";
 import { useQuery } from '@tanstack/react-query';
 import { memberApis } from '../../api/api-functions/memberApis';

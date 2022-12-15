@@ -2,7 +2,6 @@ import React from 'react';
 import { useEffect } from 'react';
 import Router from "./shared/Router";
 import GlobalStyle from './components/styles/GlobalStyle';
-import styled from 'styled-components';
 
 function App() {
   const setScreenSize = () => {

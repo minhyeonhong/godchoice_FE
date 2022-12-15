@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../elements/Button";
 import { GOOGLE_AUTH_URL, KAKAO_AUTH_URL, NAVER_AUTH_URL, GITHUB_AUTH_URL } from "../../api/login";
 import { flexColumn } from "../styles/Flex";
 import { GoogleBtn, KakaoBtn, NaverBtn } from "../../assets";

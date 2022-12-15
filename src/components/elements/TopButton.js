@@ -8,7 +8,6 @@ import X from "../../assets/images/common/X.png";
 
 const TopButton = ({ modalOn, setModalOn }) => {
   const [isTopButtonOn, setIsTopButtonOn] = useState(false);
-  const [visible, setVisible] = useState(false);
 
   useEffect(
     throttle(() => {
@@ -156,7 +155,7 @@ const StyledTopBtn = styled.button`
     right: 3em;
   }
 ` */
-;
+  ;
 const StyledTopBtnImg = styled.img`
   padding: ${(props) => (props.padding ? props.padding : "0")};
   width: ${(props) => props.width};

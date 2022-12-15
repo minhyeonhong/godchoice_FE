@@ -1,12 +1,8 @@
 import React, { useEffect, Fragment } from 'react';
-
-
 import { useInView } from "react-intersection-observer"
 import styled from 'styled-components';
-
 import { BsEye } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-
 import { BookmarkFill } from "../../assets/index";
 import PageState from '../common/PageState';
 import { useInfiniteQuery } from '@tanstack/react-query';

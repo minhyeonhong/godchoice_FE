@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import X from "../../assets/images/common/X.png";
 
 
 const WritingToggle = ({ modalOn, setModalOn }) => {
@@ -19,8 +18,6 @@ const WritingToggle = ({ modalOn, setModalOn }) => {
 
     return (
         <WritingToggleWrap>
-            {/* <img src={X} onClick={() => { setModalOn(!modalOn) }} /> */}
-
             <Cate onClick={() => writePost("/festivalpost")} style={{ marginTop: "17px" }}>행사글</Cate>
             <Cate onClick={() => writePost("/gatherpost")}>모집글</Cate>
             <Cate onClick={() => writePost("/questionpost")}>질문글</Cate>
