@@ -86,7 +86,6 @@ const FestivalPost = () => {
             postLink: festival.postLink,
         }
 
-        console.log(obj)
         if (isAdmin) {
             if (originFiles.length > 0) {
                 originFiles.forEach((file) => {

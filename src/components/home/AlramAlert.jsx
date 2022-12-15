@@ -2,14 +2,9 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { alramState } from "../../recoil/atoms";
 import { useRecoilState } from 'recoil';
-function AlramAlert({ newNotice, setNewNotice }) {
+function AlramAlert() {
+
     const [alram, setAlram] = useRecoilState(alramState);
-    // useEffect(() => {
-    //     if (newNotice.title !== undefined) {
-    //         setTimeout(() => { setNewNotice({}) }, 4000);
-    //     }
-    //     console.log("component newNotice", newNotice);
-    // }, [newNotice])
 
     useEffect(() => {
         if (alram.title !== undefined) {

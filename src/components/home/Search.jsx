@@ -28,7 +28,6 @@ const Search = ({ searchState, setSearchState, search, searchHandle }) => {
     }
     const scrollRef = useRef(null);
     const onHomeClick = () => {
-        console.log("scrollRef", scrollRef.scrollTop);
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
     return (
