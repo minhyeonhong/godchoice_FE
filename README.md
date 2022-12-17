@@ -12,6 +12,8 @@
 
 [**Back End Github**](https://github.com/godchoice-project/godchoice_BE)
 
+[**거기어때 발표영상 확인하기**](https://www.youtube.com/watch?v=zaUQwFO3tCM)
+
 <br/>
 
 <div style="text-align:center">
